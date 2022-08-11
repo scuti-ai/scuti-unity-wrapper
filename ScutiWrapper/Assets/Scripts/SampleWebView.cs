@@ -33,6 +33,7 @@ public class SampleWebView : MonoBehaviour
 
     IEnumerator Start()
     {
+
         webViewObject = (new GameObject("WebViewObject")).AddComponent<WebViewObject>();
         webViewObject.Init(
             cb: (msg) =>
@@ -147,14 +148,8 @@ public class SampleWebView : MonoBehaviour
         //webViewObject.SetBasicAuthInfo("id", "password");
 
         //webViewObject.SetScrollbarsVisibility(true);
-
-        float height = 1920;
-        if (Input.deviceOrientation == DeviceOrientation.Portrait) height = 1080;
-        float percent = 150 / height;
-        percent = Screen.height * percent;
-
-        //webViewObject.SetMargins(5, 100, 5, Screen.height / 4);
-        webViewObject.SetMargins(0, (int)percent, 0, 0, false);
+            
+        webViewObject.SetMargins(0, 0, 0, 0, false);
         webViewObject.SetTextZoom(100);  // android only. cf. https://stackoverflow.com/questions/21647641/android-webview-set-font-size-system-default/47017410#47017410
         webViewObject.SetVisibility(true);
 
@@ -201,64 +196,6 @@ public class SampleWebView : MonoBehaviour
         }
 #endif
         yield break;
-    }
-    /*
-    void OnGUI()
-    {
-        var x = 10;
+    }   
 
-        GUI.enabled = webViewObject.CanGoBack();
-        if (GUI.Button(new Rect(x, 10, 80, 80), "<")) {
-            webViewObject.GoBack();
-        }
-        GUI.enabled = true;
-        x += 90;
-
-        GUI.enabled = webViewObject.CanGoForward();
-        if (GUI.Button(new Rect(x, 10, 80, 80), ">")) {
-            webViewObject.GoForward();
-        }
-        GUI.enabled = true;
-        x += 90;
-
-        if (GUI.Button(new Rect(x, 10, 80, 80), "r")) {
-            webViewObject.Reload();
-        }
-        x += 90;
-
-        GUI.TextField(new Rect(x, 10, 180, 80), "" + webViewObject.Progress());
-        x += 190;
-
-        if (GUI.Button(new Rect(x, 10, 80, 80), "*")) {
-            var g = GameObject.Find("WebViewObject");
-            if (g != null) {
-                Destroy(g);
-            } else {
-                StartCoroutine(Start());
-            }
-        }
-        x += 90;
-
-        if (GUI.Button(new Rect(x, 10, 80, 80), "c")) {
-            Debug.Log(webViewObject.GetCookies(Url));
-        }
-        x += 90;
-
-        if (GUI.Button(new Rect(x, 10, 80, 80), "x")) {
-            webViewObject.ClearCookies();
-        }
-        x += 90;
-
-        if (GUI.Button(new Rect(x, 10, 80, 80), "D")) {
-            webViewObject.SetInteractionEnabled(false);
-        }
-        x += 90;
-
-        if (GUI.Button(new Rect(x, 10, 80, 80), "E")) {
-            webViewObject.SetInteractionEnabled(true);
-        }
-        x += 90;
-    }
-
-    */
 }
