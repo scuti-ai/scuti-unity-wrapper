@@ -28,7 +28,6 @@ using UnityEngine.UI;
 public class SampleWebView : MonoBehaviour
 {
     public string Url;
-    public Text status;
     WebViewObject webViewObject;
 
     IEnumerator Start()
@@ -39,20 +38,14 @@ public class SampleWebView : MonoBehaviour
             cb: (msg) =>
             {
                 Debug.Log(string.Format("CallFromJS[{0}]", msg));
-                status.text = msg;
-                status.GetComponent<Animation>().Play();
             },
             err: (msg) =>
             {
                 Debug.Log(string.Format("CallOnError[{0}]", msg));
-                status.text = msg;
-                status.GetComponent<Animation>().Play();
             },
             httpErr: (msg) =>
             {
                 Debug.Log(string.Format("CallOnHttpError[{0}]", msg));
-                status.text = msg;
-                status.GetComponent<Animation>().Play();
             },
             started: (msg) =>
             {
