@@ -141,17 +141,8 @@ public class ScutiWebView : MonoBehaviour
         //webViewObject.SetBasicAuthInfo("id", "password");
 
         //webViewObject.SetScrollbarsVisibility(true);
+        webViewObject.SetMargins((int)Screen.safeArea.xMin, (int)Screen.safeArea.yMin, 0, 0, false);
 
-
-        float height = 1920;
-        if (Input.deviceOrientation == DeviceOrientation.Portrait) height = 1080;
-        float percent = 150 / height;
-        percent = Screen.height * percent;
-        //webViewObject.SetMargins(5, 100, 5, Screen.height / 4);
-        webViewObject.SetMargins(0, (int)percent, 0, 0, false);
-
-
-        //webViewObject.SetMargins(0, 0, 0, 0, false);
         webViewObject.SetTextZoom(100);  // android only. cf. https://stackoverflow.com/questions/21647641/android-webview-set-font-size-system-default/47017410#47017410
         webViewObject.SetVisibility(true);
 
@@ -198,6 +189,6 @@ public class ScutiWebView : MonoBehaviour
         }
 #endif
         yield break;
-    }   
+    }
 
 }
