@@ -1,0 +1,9 @@
+{
+  "name": "com.scuti.sdk",
+  "version": "2.0.0",
+  "displayName": "Scuti SDK",
+  "description": "Scuti Marketplace",
+  "unity": "2018.4",
+  "dependencies": {
+  }
+}
