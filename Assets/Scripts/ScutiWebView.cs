@@ -29,11 +29,13 @@ public class ScutiWebView : MonoBehaviour
 {
     public string Url;
     WebViewObject webViewObject;
+    ScreenOrientation currentOrientation;
 
     public bool withSafeArea;
 
     IEnumerator Start()
     {
+        currentOrientation = Screen.orientation;
 
         webViewObject = (new GameObject("WebViewObject")).AddComponent<WebViewObject>();
         webViewObject.Init(
@@ -143,13 +145,8 @@ public class ScutiWebView : MonoBehaviour
         //webViewObject.SetBasicAuthInfo("id", "password");
 
         //webViewObject.SetScrollbarsVisibility(true);
-        if(withSafeArea)
-            webViewObject.SetMargins((int)Screen.safeArea.xMin, (int)Screen.safeArea.yMin, 0, 0, false);
-        else
-            webViewObject.SetMargins(0, 0, 0, 0, false);
 
-        webViewObject.SetTextZoom(100);  // android only. cf. https://stackoverflow.com/questions/21647641/android-webview-set-font-size-system-default/47017410#47017410
-        webViewObject.SetVisibility(true);
+        UpdateArea();
 
 #if !UNITY_WEBPLAYER && !UNITY_WEBGL
         if (Url.StartsWith("http")) {
@@ -194,6 +191,37 @@ public class ScutiWebView : MonoBehaviour
         }
 #endif
         yield break;
+    }
+
+    private void Update()
+    {        
+        if(currentOrientation != Screen.orientation)
+        {
+            currentOrientation = Screen.orientation;
+            webViewObject.Resume();
+            UpdateArea();
+        }
+    }
+
+    private void UpdateArea()
+    {
+
+        if (withSafeArea)
+            if (Screen.orientation == ScreenOrientation.LandscapeLeft || Screen.orientation == ScreenOrientation.LandscapeRight || Screen.orientation == ScreenOrientation.Landscape)
+            {
+                webViewObject.SetMargins((int)Screen.safeArea.xMin, 0, 0, 0, false);
+            }
+            else
+            {
+                // Portrait
+                webViewObject.SetMargins(0, (int)Screen.safeArea.yMin, 0, 0, false);
+            }
+        else
+            webViewObject.SetMargins(0, 0, 0, 0, false);
+
+        webViewObject.SetTextZoom(100);  // android only. cf. https://stackoverflow.com/questions/21647641/android-webview-set-font-size-system-default/47017410#47017410
+        webViewObject.SetVisibility(true);
+
     }
 
 }
