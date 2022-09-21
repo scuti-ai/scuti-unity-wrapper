@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7091343179520029919
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3079230032043796549}
+  - component: {fileID: 114942392654272934}
+  - component: {fileID: 114767684913816730}
+  - component: {fileID: 114947261729705060}
+  m_Layer: 0
+  m_Name: ScutiSDK
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3079230032043796549
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7091343179520029919}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 512, y: 384, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114942392654272934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7091343179520029919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -684761508, guid: f001f70ad4294994390a9abfdf780570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  servicesInitializer: {fileID: 0}
+--- !u!114 &114767684913816730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7091343179520029919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f878ca360293a854884ab16b052e2681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Environments:
+  - Environment: 0
+    URL: https://commerce.scuti.dev
+  - Environment: 1
+    URL: https://commerce.staging.scuti.dev
+  - Environment: 2
+    URL: https://commerce.scuti.store
+  TargetEnvironment: 2
+--- !u!114 &114947261729705060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7091343179520029919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f4e7a0184864c47971412f025e08a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

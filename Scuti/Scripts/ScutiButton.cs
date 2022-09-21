@@ -45,9 +45,8 @@ public class ScutiButton : MonoBehaviour
     }
 
     public void OnClick()
-    {
-        Debug.LogError("TODO");
-        //ScutiSDK.Instance.LoadUI();
+    { 
+        ScutiSDK.Instance.LoadUI();
         NotificationIcon.SetActive(false);
     }
 
