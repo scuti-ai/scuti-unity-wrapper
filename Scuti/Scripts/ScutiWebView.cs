@@ -161,6 +161,7 @@ public class ScutiWebView : MonoBehaviour
                 var url = Url.Replace(".html", ext);
                 var src = System.IO.Path.Combine(Application.streamingAssetsPath, url);
                 var dst = System.IO.Path.Combine(Application.persistentDataPath, url);
+                Debug.Log("Attempting: " + src + " and " + dst);
                 byte[] result = null;
                 if (src.Contains("://")) {  // for Android
 #if UNITY_2018_4_OR_NEWER

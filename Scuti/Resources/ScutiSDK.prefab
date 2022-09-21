@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3079230032043796549}
   - component: {fileID: 114942392654272934}
-  - component: {fileID: 114767684913816730}
-  - component: {fileID: 114947261729705060}
+  - component: {fileID: 592253953481273714}
+  - component: {fileID: 6954873627679445272}
   m_Layer: 0
   m_Name: ScutiSDK
   m_TagString: Untagged
@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: -684761508, guid: f001f70ad4294994390a9abfdf780570, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  servicesInitializer: {fileID: 0}
---- !u!114 &114767684913816730
+  servicesInitializer: {fileID: 6954873627679445272}
+--- !u!114 &592253953481273714
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,7 +55,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7091343179520029919}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f878ca360293a854884ab16b052e2681, type: 3}
+  m_Script: {fileID: -877105599, guid: f001f70ad4294994390a9abfdf780570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6954873627679445272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7091343179520029919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1357880021, guid: f001f70ad4294994390a9abfdf780570, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Environments:
@@ -66,15 +78,3 @@ MonoBehaviour:
   - Environment: 2
     URL: https://commerce.scuti.store
   TargetEnvironment: 2
---- !u!114 &114947261729705060
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7091343179520029919}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15f4e7a0184864c47971412f025e08a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
