@@ -18,6 +18,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+using Newtonsoft.Json.Linq;
+using Scuti;
 using Scuti.Net;
 using System;
 using System.Collections;
@@ -44,27 +46,44 @@ public class ScutiWebView : MonoBehaviour
         webViewObject.Init(
             cb: (msg) =>
             {
-                Debug.Log(string.Format("CallFromJS[{0}]", msg));
+                if (msg.ToLower().Equals("exit"))
+                {
+                    ScutiSDK.Instance.UnloadUI();
+                }
+                else if (msg.ToLower().StartsWith("exchange"))
+                {
+                    Debug.LogError("Exchange::: => " + msg);
+                    var messageSplit = msg.Split('!');
+                    if(messageSplit.Length>1)
+                    {
+                        var payload = messageSplit[1];
+                        Debug.Log("Payload: " + payload);
+                        var jPayload = JObject.Parse(payload);
+                    }
+                }
+                else { 
+                    ScutiLogger.Log(string.Format("CallFromJS[{0}]", msg));
+                }
             },
             err: (msg) =>
             {
-                Debug.Log(string.Format("CallOnError[{0}]", msg));
+                ScutiLogger.LogError(string.Format("CallOnError[{0}]", msg));
             },
             httpErr: (msg) =>
             {
-                Debug.Log(string.Format("CallOnHttpError[{0}]", msg));
+                ScutiLogger.LogError(string.Format("CallOnHttpError[{0}]", msg));
             },
             started: (msg) =>
             {
-                Debug.Log(string.Format("CallOnStarted[{0}]", msg));
+                ScutiLogger.Log(string.Format("CallOnStarted[{0}]", msg));
             },
             hooked: (msg) =>
             {
-                Debug.Log(string.Format("CallOnHooked[{0}]", msg));
+                ScutiLogger.Log(string.Format("CallOnHooked[{0}]", msg));
             },
             ld: (msg) =>
             {
-                Debug.Log(string.Format("CallOnLoaded[{0}]", msg));
+                ScutiLogger.Log(string.Format("CallOnLoaded[{0}]", msg));
 #if UNITY_EDITOR_OSX || (!UNITY_ANDROID && !UNITY_WEBPLAYER && !UNITY_WEBGL)
                 // NOTE: depending on the situation, you might prefer
                 // the 'iframe' approach.
@@ -159,7 +178,7 @@ public class ScutiWebView : MonoBehaviour
         {
             var dst = System.IO.Path.Combine(Application.persistentDataPath, Url);
             var scriptUrl = GetURL();
-            string htmlContent = "<html><head><script src=\"XURLX\"></script>\n</head>\n<body style=\"margin: -10; overflow: hidden; padding: 0;\">\n    <div id=\"scuti-store\"></div>\n     <script>\n    (async function () {\n      await window.SCUTI_SDK.initialize(\"XAPPIDX\")\n      window.SCUTI_SDK.renderStore(\n        \"scuti-store\",\n        () => Unity.call(\'abc\'),\n        (payload) => console.log(\'ON_EXCHANGE\', payload),\n        { width: \'100%\', height: \'100%\' }\n      )\n    })()\n  </script>\n</body>\n</html>";
+            string htmlContent = "<html><head><script src=\"XURLX\"></script>\n</head>\n<body style=\"margin: -10; overflow: hidden; padding: 0;\">\n    <div id=\"scuti-store\"></div>\n     <script>\n    (async function () {\n      await window.SCUTI_SDK.initialize(\"XAPPIDX\")\n      window.SCUTI_SDK.renderStore(\n        \"scuti-store\",\n        () => Unity.call(\'exit\'),\n        (payload) => Unity.call(\'exchange!\'+JSON.stringify(payload)),\n        { width: \'100%\', height: \'100%\' }\n      )\n    })()\n  </script>\n</body>\n</html>";
             htmlContent = htmlContent.Replace("XURLX", scriptUrl);
             htmlContent = htmlContent.Replace("XAPPIDX", "6db28ef4-69b0-421a-9344-31318f898790");// ScutiNetClient.Instance.GameId);
             Debug.Log("ScutiNetClient : " + ScutiNetClient.Instance);
