@@ -48,7 +48,9 @@ public class ScutiWebView : MonoBehaviour
             {
                 if (msg.ToLower().Equals("exit"))
                 {
+                    Debug.LogError("Exit Pressed");
                     ScutiSDK.Instance.UnloadUI();
+                    Destroy(webViewObject.gameObject);
                 }
                 else if (msg.ToLower().StartsWith("exchange"))
                 {

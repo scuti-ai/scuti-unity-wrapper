@@ -18,23 +18,23 @@ public class ScutiButton : MonoBehaviour
 
     public void Start()
     {
-            if (ScutiNetClient.Instance.IsInitialized && ScutiNetClient.Instance.IsAuthenticated)
-            {
-                CheckRewards();
-            }
-            else
-            {
-                ScutiNetClient.Instance.OnAuthenticated += CheckRewards;
-            }
+        if (ScutiNetClient.Instance.IsInitialized && ScutiNetClient.Instance.IsAuthenticated)
+        {
+            CheckRewards();
+        }
+        else
+        {
+            ScutiNetClient.Instance.OnAuthenticated += CheckRewards;
+        }
 
-            if (ScutiNetClient.Instance.IsInitialized)
-            {
-                CheckNewOffers();
-            }
-            else
-            {
-                ScutiNetClient.Instance.OnInitialization += CheckNewOffers;
-            }
+        if (ScutiNetClient.Instance.IsInitialized)
+        {
+            CheckNewOffers();
+        }
+        else
+        {
+            ScutiNetClient.Instance.OnInitialization += CheckNewOffers;
+        }
 
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(Button);
