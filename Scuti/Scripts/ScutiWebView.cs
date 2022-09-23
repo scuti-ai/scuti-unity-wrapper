@@ -48,7 +48,6 @@ public class ScutiWebView : MonoBehaviour
             {
                 if (msg.ToLower().Equals("exit"))
                 {
-                    Debug.LogError("Exit Pressed");
                     ScutiSDK.Instance.UnloadUI();
                     Destroy(webViewObject.gameObject);
                 }
@@ -69,11 +68,11 @@ public class ScutiWebView : MonoBehaviour
             },
             err: (msg) =>
             {
-                ScutiLogger.LogError(string.Format("CallOnError[{0}]", msg));
+                ScutiLogger.Log(string.Format("CallOnError[{0}]", msg));
             },
             httpErr: (msg) =>
             {
-                ScutiLogger.LogError(string.Format("CallOnHttpError[{0}]", msg));
+                ScutiLogger.Log(string.Format("CallOnHttpError[{0}]", msg));
             },
             started: (msg) =>
             {
@@ -222,7 +221,7 @@ public class ScutiWebView : MonoBehaviour
             }
         else
             webViewObject.SetMargins(0, 0, 0, 0, false);
-
+      
         webViewObject.SetTextZoom(100);  // android only. cf. https://stackoverflow.com/questions/21647641/android-webview-set-font-size-system-default/47017410#47017410
         webViewObject.SetVisibility(true);
 
