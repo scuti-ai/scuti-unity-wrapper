@@ -165,7 +165,7 @@ public class ScutiWebView : MonoBehaviour
                     //var src = System.IO.Path.Combine(Application.streamingAssetsPath, url);
                     var dst = System.IO.Path.Combine(Application.persistentDataPath, url);
                 var scriptUrl = GetURL();
-                string htmlContent = "<html><head><script src=\"XURLX\"></script>\n</head>\n<body style=\"margin: -10; overflow: hidden; padding: 0;\">\n    <div id=\"scuti-store\"></div>\n     <script>\n    (async function () {\n      await window.SCUTI_SDK.initialize(\"6db28ef4-69b0-421a-9344-31318f898790\")\n      window.SCUTI_SDK.renderStore(\n        \"scuti-store\",\n        () => console.log(\'ON_BACK_TO_GAME\'),\n        (payload) => console.log(\'ON_EXCHANGE\', payload)\n        { width: \'100%\', height: \'100%\' }\n      )\n    })()\n  </script>\n</body>\n</html>";
+                string htmlContent = "<html><head><script src=\"XURLX\"></script>\n</head>\n<body style=\"margin: -10; overflow: hidden; padding: 0;\">\n    <div id=\"scuti-store\"></div>\n     <script>\n    (async function () {\n      await window.SCUTI_SDK.initialize(\"6db28ef4-69b0-421a-9344-31318f898790\")\n      window.SCUTI_SDK.renderStore(\n        \"scuti-store\",\n        () => console.log(\'ON_BACK_TO_GAME\'),\n        (payload) => console.log(\'ON_EXCHANGE\', payload),\n        { width: \'100%\', height: \'100%\' }\n      )\n    })()\n  </script>\n</body>\n</html>";
                    htmlContent =  htmlContent.Replace("XURLX", scriptUrl);
 
                 //Debug.Log("Attempting: " + src + " and " + dst);
