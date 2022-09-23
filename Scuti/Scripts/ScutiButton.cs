@@ -18,8 +18,6 @@ public class ScutiButton : MonoBehaviour
 
     public void Start()
     {
-        if (ScutiNetClient.Instance != null)
-        {
             if (ScutiNetClient.Instance.IsInitialized && ScutiNetClient.Instance.IsAuthenticated)
             {
                 CheckRewards();
@@ -37,7 +35,6 @@ public class ScutiButton : MonoBehaviour
             {
                 ScutiNetClient.Instance.OnInitialization += CheckNewOffers;
             }
-        }
 
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(Button);
@@ -52,34 +49,30 @@ public class ScutiButton : MonoBehaviour
 
     private async void CheckNewOffers()
     {
-
-        Debug.LogError("TODO");
-        //var stats = await ScutiAPI.GetCategoryStatistics();
-        //NewItems?.SetActive(false);
-        //if (stats != null)
-        //{
-        //    if (stats.NewOffers.HasValue && stats.NewOffers.Value > 0)
-        //    {
-        //        NewItems?.SetActive(true);
-        //    }
-        //}
+        var stats = await ScutiAPI.GetCategoryStatistics();
+        NewItems?.SetActive(false);
+        if (stats != null)
+        {
+            if (stats.NewOffers.HasValue && stats.NewOffers.Value > 0)
+            {
+                NewItems?.SetActive(true);
+            }
+        }
     }
 
 
     private async void CheckRewards()
     {
-
-        Debug.LogError("TODO");
-        //var rewards = await ScutiAPI.GetRewards();
-        //foreach (var reward in rewards)
-        //{
-        //    if (reward.Activated == false)
-        //    {
-        //        NotificationIcon.SetActive(true);
-        //        return;
-        //    }
-        //}
-        //NotificationIcon.SetActive(false);
+        var rewards = await ScutiAPI.GetRewards();
+        foreach (var reward in rewards)
+        {
+            if (reward.Activated == false)
+            {
+                NotificationIcon.SetActive(true);
+                return;
+            }
+        }
+        NotificationIcon.SetActive(false);
     }
 
 

@@ -180,7 +180,7 @@ public class ScutiWebView : MonoBehaviour
             var scriptUrl = GetURL();
             string htmlContent = "<html><head><script src=\"XURLX\"></script>\n</head>\n<body style=\"margin: -10; overflow: hidden; padding: 0;\">\n    <div id=\"scuti-store\"></div>\n     <script>\n    (async function () {\n      await window.SCUTI_SDK.initialize(\"XAPPIDX\")\n      window.SCUTI_SDK.renderStore(\n        \"scuti-store\",\n        () => Unity.call(\'exit\'),\n        (payload) => Unity.call(\'exchange!\'+JSON.stringify(payload)),\n        { width: \'100%\', height: \'100%\' }\n      )\n    })()\n  </script>\n</body>\n</html>";
             htmlContent = htmlContent.Replace("XURLX", scriptUrl);
-            htmlContent = htmlContent.Replace("XAPPIDX", "6db28ef4-69b0-421a-9344-31318f898790");// ScutiNetClient.Instance.GameId);
+            htmlContent = htmlContent.Replace("XAPPIDX", ScutiNetClient.Instance.GameId);
             Debug.Log("ScutiNetClient : " + ScutiNetClient.Instance);
             byte[] result = Encoding.ASCII.GetBytes(htmlContent);
             System.IO.File.WriteAllBytes(dst, result);
