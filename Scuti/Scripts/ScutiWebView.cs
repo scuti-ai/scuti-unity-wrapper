@@ -18,7 +18,9 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+using System;
 using System.Collections;
+using System.Text;
 using UnityEngine;
 #if UNITY_2018_4_OR_NEWER
 using UnityEngine.Networking;
@@ -153,35 +155,44 @@ public class ScutiWebView : MonoBehaviour
             webViewObject.LoadURL(Url.Replace(" ", "%20"));
         } else {
             var exts = new string[]{
-                ".jpg",
-                ".js",
+                //".jpg",
+                //".js",
                 ".html"  // should be last
             };
             foreach (var ext in exts) {
-                var url = Url.Replace(".html", ext);
-                var src = System.IO.Path.Combine(Application.streamingAssetsPath, url);
-                var dst = System.IO.Path.Combine(Application.persistentDataPath, url);
-                Debug.Log("Attempting: " + src + " and " + dst);
-                byte[] result = null;
-                if (src.Contains("://")) {  // for Android
-#if UNITY_2018_4_OR_NEWER
-                    // NOTE: a more complete code that utilizes UnityWebRequest can be found in https://github.com/gree/unity-webview/commit/2a07e82f760a8495aa3a77a23453f384869caba7#diff-4379160fa4c2a287f414c07eb10ee36d
-                    var unityWebRequest = UnityWebRequest.Get(src);
-                    yield return unityWebRequest.SendWebRequest();
-                    result = unityWebRequest.downloadHandler.data;
-#else
-                    var www = new WWW(src);
-                    yield return www;
-                    result = www.bytes;
-#endif
-                } else {
-                    result = System.IO.File.ReadAllBytes(src);
-                }
-                System.IO.File.WriteAllBytes(dst, result);
-                if (ext == ".html") {
-                    webViewObject.LoadURL("file://" + dst.Replace(" ", "%20"));
-                    break;
-                }
+               
+                    var url = Url.Replace(".html", ext);
+                    //var src = System.IO.Path.Combine(Application.streamingAssetsPath, url);
+                    var dst = System.IO.Path.Combine(Application.persistentDataPath, url);
+                var scriptUrl = GetURL();
+                string htmlContent = "<html><head><script src=\"XURLX\"></script>\n</head>\n<body style=\"margin: -10; overflow: hidden; padding: 0;\">\n    <div id=\"scuti-store\"></div>\n     <script>\n    (async function () {\n      await window.SCUTI_SDK.initialize(\"6db28ef4-69b0-421a-9344-31318f898790\")\n      window.SCUTI_SDK.renderStore(\n        \"scuti-store\",\n        () => console.log(\'ON_BACK_TO_GAME\'),\n        (payload) => console.log(\'ON_EXCHANGE\', payload)\n        { width: \'100%\', height: \'100%\' }\n      )\n    })()\n  </script>\n</body>\n</html>";
+                   htmlContent =  htmlContent.Replace("XURLX", scriptUrl);
+
+                //Debug.Log("Attempting: " + src + " and " + dst);
+                byte[] result = Encoding.ASCII.GetBytes(htmlContent);
+//                    if (src.Contains("://"))
+//                    {  // for Android
+//#if UNITY_2018_4_OR_NEWER
+//                        // NOTE: a more complete code that utilizes UnityWebRequest can be found in https://github.com/gree/unity-webview/commit/2a07e82f760a8495aa3a77a23453f384869caba7#diff-4379160fa4c2a287f414c07eb10ee36d
+//                        var unityWebRequest = UnityWebRequest.Get(src);
+//                        yield return unityWebRequest.SendWebRequest();
+//                        result = unityWebRequest.downloadHandler.data;
+//#else
+//                    var www = new WWW(src);
+//                    yield return www;
+//                    result = www.bytes;
+//#endif
+//                    }
+//                    else
+//                    {
+//                        result = System.IO.File.ReadAllBytes(src);
+//                    }
+                    System.IO.File.WriteAllBytes(dst, result);
+                    if (ext == ".html")
+                    {
+                        webViewObject.LoadURL("file://" + dst.Replace(" ", "%20"));
+                        break;
+                    } 
             }
         }
 #else
@@ -192,6 +203,11 @@ public class ScutiWebView : MonoBehaviour
         }
 #endif
         yield break;
+    }
+
+    private string GetURL()
+    {
+        return "https://staging.scuti-sdk.js.run.app.scuti.store/browser.js";
     }
 
     private void Update()
