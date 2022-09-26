@@ -44,6 +44,17 @@ public class ScutiWebView : MonoBehaviour
 
         webViewObject = (new GameObject("WebViewObject")).AddComponent<WebViewObject>();
         webViewObject.Init(
+#if !UNITY_EDITOR
+// 
+#if UNITY_IOS
+            // iOS WKContentMode (0: recommended, 1: mobile, 2: desktop)
+            wkContentMode: 1,
+#elif UNITY_ANDROID
+            // Samsung Galaxy S8 user-agent
+            ua: "Mozilla/5.0 (Linux; Android 9; SM-G950N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.61 Mobile Safari/537.36",
+#endif
+
+#endif
             cb: (msg) =>
             {
                 if (msg.ToLower().Equals("exit"))
