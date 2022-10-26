@@ -44,17 +44,17 @@ public class ScutiWebView : MonoBehaviour
 
         webViewObject = (new GameObject("WebViewObject")).AddComponent<WebViewObject>();
         webViewObject.Init(
-#if !UNITY_EDITOR
-// 
-#if UNITY_IOS
-            // iOS WKContentMode (0: recommended, 1: mobile, 2: desktop)
-            wkContentMode: 1,
-#elif UNITY_ANDROID
-            // Samsung Galaxy S8 user-agent
-            ua: "Mozilla/5.0 (Linux; Android 9; SM-G950N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.61 Mobile Safari/537.36",
-#endif
+//#if !UNITY_EDITOR
+//// 
+//#if UNITY_IOS
+//            // iOS WKContentMode (0: recommended, 1: mobile, 2: desktop)
+//            wkContentMode: 1,
+//#elif UNITY_ANDROID
+//            // Samsung Galaxy S8 user-agent
+//            ua: "Mozilla/5.0 (Linux; Android 9; SM-G950N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.61 Mobile Safari/537.36",
+//#endif
 
-#endif
+//#endif
             cb: (msg) =>
             {
                 if (msg.ToLower().Equals("exit"))
@@ -188,9 +188,10 @@ public class ScutiWebView : MonoBehaviour
         }
         else
         {
+            Debug.LogError("Resoltuion : " + Screen.width + " vs " + Screen.height);
             var dst = System.IO.Path.Combine(Application.persistentDataPath, Url);
             var scriptUrl = GetURL();
-            string htmlContent = "<html><head><script src=\"XURLX\"></script>\n</head>\n<body style=\"margin: -10; overflow: hidden; padding: 0;\">\n    <div id=\"scuti-store\"></div>\n     <script>\n    (async function () {\n      await window.SCUTI_SDK.initialize(\"XAPPIDX\")\n      window.SCUTI_SDK.renderStore(\n        \"scuti-store\",\n        () => Unity.call(\'exit\'),\n        (payload) => Unity.call(\'exchange!\'+JSON.stringify(payload)),\n        { width: \'400\', height: \'1200\' }\n      )\n    })()\n  </script>\n</body>\n</html>";
+            string htmlContent = "<html><head><script src=\"XURLX\"></script>\n</head>\n<body style=\"margin: -10; overflow: hidden; padding: 0;\">\n    <div id=\"scuti-store\"></div>\n     <script>\n    (async function () {\n      await window.SCUTI_SDK.initialize(\"XAPPIDX\")\n      window.SCUTI_SDK.renderStore(\n        \"scuti-store\",\n        () => Unity.call(\'exit\'),\n        (payload) => Unity.call(\'exchange!\'+JSON.stringify(payload)),\n        { width: \'100%\', height: \'100%\' }\n      )\n    })()\n  </script>\n</body>\n</html>";
             htmlContent = htmlContent.Replace("XURLX", scriptUrl);
             htmlContent = htmlContent.Replace("XAPPIDX", ScutiNetClient.Instance.GameId);
             Debug.Log("ScutiNetClient : " + ScutiNetClient.Instance);
@@ -198,6 +199,7 @@ public class ScutiWebView : MonoBehaviour
             System.IO.File.WriteAllBytes(dst, result);
             //webViewObject.LoadHTML
             webViewObject.LoadURL("file://" + dst.Replace(" ", "%20"));
+            //webViewObject.
         }
         yield break;
     }
