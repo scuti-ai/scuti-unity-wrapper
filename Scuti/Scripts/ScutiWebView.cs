@@ -181,24 +181,24 @@ public class ScutiWebView : MonoBehaviour
         //webViewObject.SetScrollbarsVisibility(true);
 
         UpdateArea();
-
+        Url = "https://dev.run.app.scuti.store/?gameId=1e6e003f-0b94-4671-bc35-ccc1b48ce87d";
         if (Url.StartsWith("http"))
         {
             webViewObject.LoadURL(Url.Replace(" ", "%20"));
         }
         else
         {
-            Debug.LogError("Resoltuion : " + Screen.width + "x" + Screen.height +" vs "+Screen.currentResolution.width+"x"+Screen.currentResolution.height);
+            //Debug.LogError("Resoltuion : " + Screen.width + "x" + Screen.height +" vs "+Screen.currentResolution.width+"x"+Screen.currentResolution.height);
             var dst = System.IO.Path.Combine(Application.persistentDataPath, Url);
             var scriptUrl = GetURL();
             string htmlContent = "<html><head><script src=\"XURLX\"></script>\n</head>\n<body style=\"margin: -10; overflow: hidden; padding: 0;\">\n    <div id=\"scuti-store\"></div>\n     <script>\n    (async function () {\n      await window.SCUTI_SDK.initialize(\"XAPPIDX\")\n      window.SCUTI_SDK.renderStore(\n        \"scuti-store\",\n        () => Unity.call(\'exit\'),\n        (payload) => Unity.call(\'exchange!\'+JSON.stringify(payload)),\n        { width: \'100%\', height: \'100%\' }\n      )\n    })()\n  </script>\n</body>\n</html>";
             htmlContent = htmlContent.Replace("XURLX", scriptUrl);
             htmlContent = htmlContent.Replace("XAPPIDX", ScutiNetClient.Instance.GameId);
-            Debug.Log("ScutiNetClient : " + ScutiNetClient.Instance);
+            //Debug.Log("ScutiNetClient : " + ScutiNetClient.Instance);
             byte[] result = Encoding.ASCII.GetBytes(htmlContent);
             System.IO.File.WriteAllBytes(dst, result);
+            //webViewObject.LoadURL("file://" + dst.Replace(" ", "%20"));
             //webViewObject.LoadHTML
-            webViewObject.LoadURL("file://" + dst.Replace(" ", "%20"));
             //webViewObject.
         }
         yield break;
