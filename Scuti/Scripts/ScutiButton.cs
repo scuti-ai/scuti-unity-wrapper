@@ -7,7 +7,6 @@ public class ScutiButton : MonoBehaviour
 {
     public GameObject NotificationIcon;
     public GameObject NewItems;
-    public GameObject Button;
 
     private void Awake()
     {
@@ -19,8 +18,8 @@ public class ScutiButton : MonoBehaviour
     {
         ScutiSDK.Instance.OnNewProduct += OnNewProducts;
         ScutiSDK.Instance.OnNewReward += OnNewRewards;
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(Button);
+        //EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(Button);
     }
 
     public void OnEnable()

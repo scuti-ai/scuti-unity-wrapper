@@ -47,7 +47,7 @@ public class UnitySendMessageDispatcher
 }
 #endif
 
-public class WebViewObject : MonoBehaviour
+public class WebViewObject : MonoBehaviour, IWebView
 {
     Callback onJS;
     Callback onError;
