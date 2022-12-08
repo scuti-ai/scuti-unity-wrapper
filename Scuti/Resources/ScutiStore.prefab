@@ -9,9 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 376175917993650483}
-  - component: {fileID: 376175917993650481}
+  - component: {fileID: 809783021939220686}
+  - component: {fileID: 6297835211198784177}
   m_Layer: 0
-  m_Name: ScutiWebView
+  m_Name: ScutiStore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &376175917993650481
+--- !u!114 &809783021939220686
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,8 +41,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 376175917993650482}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb516f7ac0cee4b0f8345a5a60de3f42, type: 3}
+  m_Script: {fileID: 542332937, guid: f001f70ad4294994390a9abfdf780570, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Url: ScutiStore.html
+  Url: 
   withSafeArea: 1
+--- !u!114 &6297835211198784177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376175917993650482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4d2b188f50df4b299eb714ef4360ee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

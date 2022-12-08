@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Scuti;
-using Scuti.Net;
 using System;
 using UnityEngine.EventSystems;
 
@@ -18,70 +17,42 @@ public class ScutiButton : MonoBehaviour
 
     public void Start()
     {
-        if (ScutiNetClient.Instance.IsInitialized && ScutiNetClient.Instance.IsAuthenticated)
-        {
-            CheckRewards();
-        }
-        else
-        {
-            ScutiNetClient.Instance.OnAuthenticated += CheckRewards;
-        }
-
-        if (ScutiNetClient.Instance.IsInitialized)
-        {
-            CheckNewOffers();
-        }
-        else
-        {
-            ScutiNetClient.Instance.OnInitialization += CheckNewOffers;
-        }
-
+        ScutiSDK.Instance.OnNewProduct += OnNewProducts;
+        ScutiSDK.Instance.OnNewReward += OnNewRewards;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(Button);
-
     }
+
+    public void OnEnable()
+    {
+        ScutiSDK.Instance.RequestNew();
+    }
+     
 
     public void OnClick()
     { 
-        ScutiSDK.Instance.LoadUI();
+        ScutiSDK.Instance.ShowStore();
         NotificationIcon.SetActive(false);
     }
 
-    private async void CheckNewOffers()
+    private void OnNewProducts(bool value)
     {
-        var stats = await ScutiAPI.GetCategoryStatistics();
-        NewItems?.SetActive(false);
-        if (stats != null)
-        {
-            if (stats.NewOffers.HasValue && stats.NewOffers.Value > 0)
-            {
-                NewItems?.SetActive(true);
-            }
-        }
+        NewItems?.SetActive(value);
     }
 
 
-    private async void CheckRewards()
+    private void OnNewRewards(bool value)
     {
-        var rewards = await ScutiAPI.GetRewards();
-        foreach (var reward in rewards)
-        {
-            if (reward.Activated == false)
-            {
-                NotificationIcon.SetActive(true);
-                return;
-            }
-        }
-        NotificationIcon.SetActive(false);
+        NotificationIcon.SetActive(value);
     }
 
 
     private void OnDestroy()
     {
-        if (ScutiNetClient.Instance != null)
+        if (ScutiSDK.Instance != null)
         {
-            ScutiNetClient.Instance.OnAuthenticated -= CheckRewards;
-            ScutiNetClient.Instance.OnInitialization -= CheckNewOffers;
+            ScutiSDK.Instance.OnNewProduct -= OnNewProducts;
+            ScutiSDK.Instance.OnNewReward -= OnNewRewards;
         }
     }
 
