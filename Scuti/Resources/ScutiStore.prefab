@@ -46,6 +46,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Url: 
   withSafeArea: 1
+  Environments:
+  - Environment: 0
+    URL: https://dev.run.app.scuti.store/
+  - Environment: 1
+    URL: https://dev.run.app.scuti.store/
+  - Environment: 2
+    URL: https://dev.run.app.scuti.store/
+  TargetEnvironment: 0
 --- !u!114 &6297835211198784177
 MonoBehaviour:
   m_ObjectHideFlags: 0
