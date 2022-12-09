@@ -8,6 +8,8 @@ public class ScutiButton : MonoBehaviour
     public GameObject NotificationIcon;
     public GameObject NewItems;
 
+    private bool _started;
+
     private void Awake()
     {
         NotificationIcon.SetActive(true);
@@ -18,13 +20,16 @@ public class ScutiButton : MonoBehaviour
     {
         ScutiSDK.Instance.OnNewProduct += OnNewProducts;
         ScutiSDK.Instance.OnNewReward += OnNewRewards;
+        _started = true;
+        ScutiSDK.Instance.RequestNew();
         //EventSystem.current.SetSelectedGameObject(null);
         //EventSystem.current.SetSelectedGameObject(Button);
     }
 
     public void OnEnable()
     {
-        ScutiSDK.Instance.RequestNew();
+        if(_started)
+            ScutiSDK.Instance.RequestNew();
     }
      
 
