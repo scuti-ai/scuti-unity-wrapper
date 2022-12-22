@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 542332937, guid: f001f70ad4294994390a9abfdf780570, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Url: 
   withSafeArea: 1
   Environments:
   - Environment: 0
@@ -53,7 +52,7 @@ MonoBehaviour:
     URL: https://dev.run.app.scuti.store/
   - Environment: 2
     URL: https://dev.run.app.scuti.store/
-  TargetEnvironment: 0
+  TargetEnvironment: 1
 --- !u!114 &6297835211198784177
 MonoBehaviour:
   m_ObjectHideFlags: 0
