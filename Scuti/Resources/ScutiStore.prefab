@@ -50,10 +50,10 @@ MonoBehaviour:
   - Environment: 0
     URL: https://dev.run.app.scuti.store/
   - Environment: 1
-    URL: https://dev.run.app.scuti.store/
+    URL: https://staging.run.app.scuti.store/
   - Environment: 2
-    URL: https://dev.run.app.scuti.store/
-  TargetEnvironment: 0
+    URL: https://store.scutishopping.com/
+  TargetEnvironment: 0 
 --- !u!114 &6297835211198784177
 MonoBehaviour:
   m_ObjectHideFlags: 0
