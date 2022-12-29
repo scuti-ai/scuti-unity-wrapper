@@ -1,4 +1,4 @@
-# scuti-unity-wrapper
+# Scuti Unity SDK
 
 Scuti is a monetization platform designed to enhance player experiences with your games. 
 
