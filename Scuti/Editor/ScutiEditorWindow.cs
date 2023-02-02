@@ -88,8 +88,8 @@ public class ScutiEditorWindow : EditorWindow
                 canv = parent.GetComponentInParent<Canvas>();
        
             string prefabName = ScutiConstants.BUTTON_PREFAB_NAME;
-            if (canv == null)
-                prefabName = ScutiConstants.BUTTON_PREFAB_3D_NAME;
+            //if (canv == null)
+            //    prefabName = ScutiConstants.BUTTON_PREFAB_3D_NAME;
 
             Transform r = parent.root;
 
