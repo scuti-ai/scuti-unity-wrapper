@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 #if UNITY_2018_4_OR_NEWER
 using UnityEngine.Networking;
+using Scuti;
 #endif
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
 using System.IO;
@@ -424,15 +425,14 @@ public class WebViewObject : MonoBehaviour, IWebView
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.init", name);
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
-        //TODO: UNSUPPORTED
-        Debug.LogError("Webview is not supported on this platform.");
+        ScutiLogger.LogError("Webview is not supported on this platform.");
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         {
             var uri = new Uri(_CWebViewPlugin_GetAppPath());
             var info = File.ReadAllText(uri.LocalPath + "Contents/Info.plist");
             if (Regex.IsMatch(info, @"<key>CFBundleGetInfoString</key>\s*<string>Unity version [5-9]\.[3-9]")
                 && !Regex.IsMatch(info, @"<key>NSAppTransportSecurity</key>\s*<dict>\s*<key>NSAllowsArbitraryLoads</key>\s*<true/>\s*</dict>")) {
-                Debug.LogWarning("<color=yellow>WebViewObject: NSAppTransportSecurity isn't configured to allow HTTP. If you need to allow any HTTP access, please shutdown Unity and invoke:</color>\n/usr/libexec/PlistBuddy -c \"Add NSAppTransportSecurity:NSAllowsArbitraryLoads bool true\" /Applications/Unity/Unity.app/Contents/Info.plist");
+                ScutiLogger.LogWarning("<color=yellow>WebViewObject: NSAppTransportSecurity isn't configured to allow HTTP. If you need to allow any HTTP access, please shutdown Unity and invoke:</color>\n/usr/libexec/PlistBuddy -c \"Add NSAppTransportSecurity:NSAllowsArbitraryLoads bool true\" /Applications/Unity/Unity.app/Contents/Info.plist");
             }
         }
 #if UNITY_EDITOR_OSX
@@ -483,7 +483,7 @@ public class WebViewObject : MonoBehaviour, IWebView
             }
         }
 #else
-        Debug.LogError("Webview is not supported on this platform.");
+        ScutiLogger.LogError("Webview is not supported on this platform.");
 #endif
     }
 
@@ -878,7 +878,6 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     public void EvaluateJS(string js)
     {
-        Debug.Log("Eval JS: " + js);
 #if UNITY_WEBGL
 #if !UNITY_EDITOR
         _gree_unity_webview_evaluateJS(name, js);
