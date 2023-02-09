@@ -266,10 +266,15 @@ public class ScutiEditorWindow : EditorWindow
         {
             Application.OpenURL(ScutiConstants.DOCUMENTATION_URL);
         }
-        GUILayout.Space(40);
-        if (GUILayout.Button("Dashboard", GUILayout.Height(BUTTON_HEIGHT), GUILayout.Width(BUTTON_WIDTH)))
+        GUILayout.Space(5);
+        if (GUILayout.Button("Dashboard (prod)", GUILayout.Height(BUTTON_HEIGHT), GUILayout.Width(BUTTON_WIDTH)))
         {
-            Application.OpenURL("https://web-test.scuti.mindtrust.co/");
+            Application.OpenURL("https://dashboard.scuti.store/");
+        }
+        GUILayout.Space(5);
+        if (GUILayout.Button("Dashboard (stg)", GUILayout.Height(BUTTON_HEIGHT), GUILayout.Width(BUTTON_WIDTH)))
+        {
+            Application.OpenURL("https://frontend.staging.scuti.dev/");
         }
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
