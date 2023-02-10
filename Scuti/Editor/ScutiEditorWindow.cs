@@ -222,7 +222,7 @@ public class ScutiEditorWindow : EditorWindow
                 developerKey = GUILayout.TextField(developerKey);
 
                 GUILayout.Label("Secret");
-                secret = GUILayout.TextField(secret);
+                secret = GUILayout.TextField(secret, GUILayout.MaxWidth(380));
             }
 
             GUILayout.Space(10);
