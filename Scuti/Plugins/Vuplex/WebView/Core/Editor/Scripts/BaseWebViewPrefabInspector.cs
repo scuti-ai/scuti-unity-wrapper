@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+#if UNITY_EDITOR
 using UnityEditor;
 
 namespace Vuplex.WebView.Editor {
@@ -58,16 +59,16 @@ namespace Vuplex.WebView.Editor {
             EditorUtils.DrawLink("Remote debugging help", "https://support.vuplex.com/articles/how-to-debug-web-content", 27);
             EditorGUILayout.Space();
             EditorGUILayout.Space();
-            #if UNITY_2019_1_OR_NEWER
+#if UNITY_2019_1_OR_NEWER
                 // BeginFoldoutHeaderGroup and EndFoldoutHeaderGroup only exist in Unity 2019.1 and newer.
                 _showOtherSettings = EditorGUILayout.BeginFoldoutHeaderGroup(_showOtherSettings, "Other settings");
-            #else
+#else
                 // Fallback to creating a label for the section.
                 _showOtherSettings = true;
                 var style = new UnityEngine.GUIStyle { fontStyle = UnityEngine.FontStyle.Bold };
                 style.normal.textColor = EditorGUIUtility.isProSkin ? new UnityEngine.Color(0.77f, 0.77f, 0.77f) : UnityEngine.Color.black;
                 EditorGUILayout.LabelField("Other settings", style);
-            #endif
+#endif
             if (_showOtherSettings) {
                 _renderCustomOtherSettings();
                 EditorGUILayout.PropertyField(_clickingEnabled);
@@ -76,9 +77,9 @@ namespace Vuplex.WebView.Editor {
                 EditorGUILayout.PropertyField(_scrollingSensitivity);
                 EditorGUILayout.PropertyField(_dragThreshold);
             }
-            #if UNITY_2019_1_OR_NEWER
+#if UNITY_2019_1_OR_NEWER
                 EditorGUILayout.EndFoldoutHeaderGroup();
-            #endif
+#endif
             EditorGUILayout.Space();
             serializedObject.ApplyModifiedProperties();
         }
@@ -106,3 +107,4 @@ namespace Vuplex.WebView.Editor {
         protected virtual void _renderCustomPlatformSpecificSettings() {}
     }
 }
+#endif

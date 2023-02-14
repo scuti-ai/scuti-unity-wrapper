@@ -766,7 +766,7 @@ namespace Vuplex.WebView.Internal {
                 #if UNITY_2019_3_OR_NEWER
                     ["Rendering threading mode"] = SystemInfo.renderingThreadingMode,
                 #else
-                    ["Multithreaded rendering"] = PlayerSettings.MTRendering,
+                    //["Multithreaded rendering"] = PlayerSettings.MTRendering,
                 #endif
                     ["Render pipeline"] = GraphicsSettings.renderPipelineAsset?.ToString() ?? "default",
                 #if UNITY_2018_2_OR_NEWER
