@@ -194,6 +194,12 @@ public class WebViewObject : MonoBehaviour, IWebView
                 && (Screen.autorotateToPortrait || Screen.autorotateToPortraitUpsideDown));
     }
 #elif UNITY_WSA
+    public EventHandler PageLoaded;
+
+    public EventHandler GetEventPageLoaded()
+    {
+        return PageLoaded;
+    }
     Vuplex.WebView.IWebView webView;
     Canvas TargetWebCanvas;
     CanvasWebViewPrefab _canvasWebView;
@@ -202,6 +208,15 @@ public class WebViewObject : MonoBehaviour, IWebView
 #else
     IntPtr webView;
 #endif
+
+    public bool LoadAsync()
+    {
+#if UNITY_WSA
+        return true;
+#else
+        return false;
+#endif
+    }
 
     void Awake()
     {
@@ -242,7 +257,7 @@ public class WebViewObject : MonoBehaviour, IWebView
         }
     }
 
-#if  UNITY_WSA
+#if UNITY_WSA
     private void OnCanvasWebInitialized(object sender, EventArgs e)
     {
         _initialized = true;
@@ -259,6 +274,8 @@ public class WebViewObject : MonoBehaviour, IWebView
         if(e.Type == ProgressChangeType.Finished)
         {
             Debug.LogError("page loaded");
+            //PageLoaded?.Invoke(this, new EventArgs());
+            GetComponent<ScutiWebView>().DoShow();
         } else if(e.Type == ProgressChangeType.Failed)
         {
             Debug.LogError("failed to load page");
@@ -950,6 +967,18 @@ public class WebViewObject : MonoBehaviour, IWebView
 #endif
     }
 
+    private void JSResponse(string res)
+    {
+        Debug.Log("  >>> EvaluateJS::Response::");
+        Debug.Log(res);
+        Type tp = res.GetType();
+        Debug.Log(tp.Name);
+        Debug.Log(tp.FullName);
+        Debug.Log(tp.Assembly);
+        Debug.Log("  >>> EvaluateJS::END <<<");
+
+    }
+
     public void EvaluateJS(string js)
     {
 #if UNITY_WEBGL
@@ -961,7 +990,9 @@ public class WebViewObject : MonoBehaviour, IWebView
 #elif UNITY_WSA
         if (webView == null)
             return;
-        webView.ExecuteJavaScript(js);
+        Debug.Log(" >>---> EvaluateJS::" + js);
+        webView.ExecuteJavaScript(js, JSResponse);
+
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IPHONE
@@ -996,13 +1027,14 @@ public class WebViewObject : MonoBehaviour, IWebView
 #endif
     }
 
-    public bool CanGoBack()
+    async public System.Threading.Tasks.Task<bool> CanGoBack()
     {
 #if UNITY_WEBPLAYER || UNITY_WEBGL
         //TODO: UNSUPPORTED
         return false;
 #elif UNITY_WSA
-        return false;
+        bool canGoForward = await webView.CanGoBack();
+        return canGoForward;
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
         return false;
@@ -1017,13 +1049,14 @@ public class WebViewObject : MonoBehaviour, IWebView
 #endif
     }
 
-    public bool CanGoForward()
+    async public System.Threading.Tasks.Task<bool> CanGoForward()
     {
 #if UNITY_WEBPLAYER || UNITY_WEBGL
         //TODO: UNSUPPORTED
         return false;
 #elif UNITY_WSA
-        return false;
+        bool canGoForward = await webView.CanGoForward();
+        return canGoForward;
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
         return false;
@@ -1040,7 +1073,9 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     public void GoBack()
     {
-#if UNITY_WEBPLAYER || UNITY_WEBGL || UNITY_WSA
+#if UNITY_WSA
+        webView.GoBack();
+#elif UNITY_WEBPLAYER || UNITY_WEBGL || UNITY_WSA
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
@@ -1057,7 +1092,9 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     public void GoForward()
     {
-#if UNITY_WEBPLAYER || UNITY_WEBGL || UNITY_WSA
+#if UNITY_WSA
+        webView.GoForward();
+#elif UNITY_WEBPLAYER || UNITY_WEBGL || UNITY_WSA
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
@@ -1074,7 +1111,9 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     public void Reload()
     {
-#if UNITY_WEBPLAYER || UNITY_WEBGL || UNITY_WSA
+#if UNITY_WSA
+        webView.Reload();
+#elif UNITY_WEBPLAYER || UNITY_WEBGL || UNITY_WSA
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
@@ -1123,6 +1162,7 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     public void CallFromJS(string message)
     {
+            Debug.Log("  >>> CallFromJS::" + message);
         if (onJS != null)
         {
 #if !UNITY_ANDROID
@@ -1132,6 +1172,8 @@ public class WebViewObject : MonoBehaviour, IWebView
             message = WWW.UnEscapeURL(message);
 #endif // UNITY_2018_4_OR_NEWER
 #endif // !UNITY_ANDROID
+            Debug.Log("---> CallFromJS::" + message);
+
             onJS(message);
         }
     }
@@ -1147,6 +1189,7 @@ public class WebViewObject : MonoBehaviour, IWebView
             message = WWW.UnEscapeURL(message);
 #endif // UNITY_2018_4_OR_NEWER
 #endif // !UNITY_ANDROID
+            Debug.Log("---> CallOnHooked::" + message);
             onHooked(message);
         }
     }
