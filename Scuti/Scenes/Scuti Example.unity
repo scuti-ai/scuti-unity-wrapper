@@ -387,6 +387,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScutiButton
       objectReference: {fileID: 0}
+    - target: {fileID: 114119739737683062, guid: 2cb2618eace960047ba12632ff6baf3c,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 950fa164a24084c4480bf406f0a9f9ff,
+        type: 3}
     - target: {fileID: 224833251874926114, guid: 2cb2618eace960047ba12632ff6baf3c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -425,7 +431,7 @@ PrefabInstance:
     - target: {fileID: 224833251874926114, guid: 2cb2618eace960047ba12632ff6baf3c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224833251874926114, guid: 2cb2618eace960047ba12632ff6baf3c,
         type: 3}
