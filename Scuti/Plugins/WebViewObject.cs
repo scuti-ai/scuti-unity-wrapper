@@ -194,16 +194,12 @@ public class WebViewObject : MonoBehaviour, IWebView
                 && (Screen.autorotateToPortrait || Screen.autorotateToPortraitUpsideDown));
     }
 #elif UNITY_WSA
-    public EventHandler PageLoaded;
-
-    public EventHandler GetEventPageLoaded()
-    {
-        return PageLoaded;
-    }
+    
     Vuplex.WebView.IWebView webView;
     Canvas TargetWebCanvas;
     CanvasWebViewPrefab _canvasWebView;
     bool _initialized = false;
+    bool _pageLoaded = false;
     string _url = string.Empty;
 #else
     IntPtr webView;
@@ -217,6 +213,7 @@ public class WebViewObject : MonoBehaviour, IWebView
         return false;
 #endif
     }
+
 
     void Awake()
     {
@@ -263,18 +260,31 @@ public class WebViewObject : MonoBehaviour, IWebView
         _initialized = true;
         webView = _canvasWebView.WebView;
         webView.MessageEmitted += OnVuplexMessageEmmitted;
+        webView.PageLoadFailed += WebView_PageLoadFailed;
+        webView.ConsoleMessageLogged += WebView_ConsoleMessageLogged;
         webView.LoadProgressChanged += OnLoadProgressChanged;
-        Debug.Log("---> OnCanvasWebInitialized::"+_url);
-        if(_url != string.Empty)
+        if (_url != string.Empty)
+        {
             webView.LoadUrl(_url);
+        }
+    }
+
+    private void WebView_ConsoleMessageLogged(object sender, ConsoleMessageEventArgs e)
+    {
+        Debug.Log(" -=> WebView_ConsoleMessageLogged::" + e.SerializeJSON());
+    }
+
+    private void WebView_PageLoadFailed(object sender, EventArgs e)
+    {
+        Debug.Log(" -=> WebView_PageLoadFailed::" + e.SerializeJSON());
     }
 
     private void OnLoadProgressChanged(object sender, ProgressChangedEventArgs e)
     {
-        if(e.Type == ProgressChangeType.Finished)
+        if (e.Type == ProgressChangeType.Finished)
         {
-            Debug.LogError("page loaded");
-            //PageLoaded?.Invoke(this, new EventArgs());
+            _pageLoaded = true;
+            Debug.Log("page loaded::"+_url);
             GetComponent<ScutiWebView>().DoShow();
         } else if(e.Type == ProgressChangeType.Failed)
         {
@@ -927,7 +937,7 @@ public class WebViewObject : MonoBehaviour, IWebView
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.loadURL", name, url);
 #elif UNITY_WSA
-        Debug.Log("---> LoadURL::" + _initialized+ "  url:"+ url);
+        Debug.Log("---> LoadURL::initialized:" + _initialized+ "  url:"+ url);
 
         if (_initialized)
             webView.LoadUrl(url);
@@ -969,14 +979,7 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     private void JSResponse(string res)
     {
-        Debug.Log("  >>> EvaluateJS::Response::");
-        Debug.Log(res);
-        Type tp = res.GetType();
-        Debug.Log(tp.Name);
-        Debug.Log(tp.FullName);
-        Debug.Log(tp.Assembly);
-        Debug.Log("  >>> EvaluateJS::END <<<");
-
+        Debug.Log("  >>> EvaluateJS::Response::"+res);
     }
 
     public void EvaluateJS(string js)
@@ -988,9 +991,8 @@ public class WebViewObject : MonoBehaviour, IWebView
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.evaluateJS", name, js);
 #elif UNITY_WSA
-        if (webView == null)
+        if (webView == null || !_initialized || !_pageLoaded)
             return;
-        Debug.Log(" >>---> EvaluateJS::" + js);
         webView.ExecuteJavaScript(js, JSResponse);
 
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
@@ -1162,7 +1164,6 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     public void CallFromJS(string message)
     {
-            Debug.Log("  >>> CallFromJS::" + message);
         if (onJS != null)
         {
 #if !UNITY_ANDROID
@@ -1172,7 +1173,6 @@ public class WebViewObject : MonoBehaviour, IWebView
             message = WWW.UnEscapeURL(message);
 #endif // UNITY_2018_4_OR_NEWER
 #endif // !UNITY_ANDROID
-            Debug.Log("---> CallFromJS::" + message);
 
             onJS(message);
         }
@@ -1189,7 +1189,6 @@ public class WebViewObject : MonoBehaviour, IWebView
             message = WWW.UnEscapeURL(message);
 #endif // UNITY_2018_4_OR_NEWER
 #endif // !UNITY_ANDROID
-            Debug.Log("---> CallOnHooked::" + message);
             onHooked(message);
         }
     }
