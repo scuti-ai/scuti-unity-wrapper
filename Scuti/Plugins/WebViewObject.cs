@@ -855,6 +855,15 @@ public class WebViewObject : MonoBehaviour, IWebView
 #endif
     }
 
+    public bool LoadAsync()
+    {
+#if UNITY_WSA
+        return true;
+#else
+        return false;
+#endif
+    }
+
     public void LoadHTML(string html, string baseUrl)
     {
         if (string.IsNullOrEmpty(html))
