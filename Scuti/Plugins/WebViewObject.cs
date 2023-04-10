@@ -285,7 +285,7 @@ public class WebViewObject : MonoBehaviour, IWebView
         {
             _pageLoaded = true;
             Debug.Log("page loaded::"+_url);
-            //GetComponent<ScutiWebView>().DoShow();
+            GetComponent<ScutiWebView>().DoShow();
         } else if(e.Type == ProgressChangeType.Failed)
         {
             Debug.LogError("failed to load page");
