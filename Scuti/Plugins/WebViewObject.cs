@@ -834,6 +834,9 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     public void LoadURL(string url)
     {
+        Debug.LogError("Clear cache");
+        ClearCache(true);
+
         if (string.IsNullOrEmpty(url))
             return;
 #if UNITY_WEBGL
