@@ -889,7 +889,6 @@ public class WebViewObject : MonoBehaviour, IWebView
     public void EvaluateJS(string js)
     {
         if (string.IsNullOrEmpty(js)) return;
-        Debug.LogError("Eval: " + js);
 #if UNITY_WEBGL
 #if !UNITY_EDITOR
         _gree_unity_webview_evaluateJS(name, js);
