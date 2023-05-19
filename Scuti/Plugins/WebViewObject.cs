@@ -890,13 +890,13 @@ public class WebViewObject : MonoBehaviour, IWebView
     {
         if (string.IsNullOrEmpty(js)) return;
 #if UNITY_WEBGL
-        string script = string.Format(@"
-            var iframe = document.getElementById('webview_{0}');
-            var message = '{1}';
-            var targetOrigin = '{2}';
-            iframe.contentWindow.postMessage(message, targetOrigin);
-        ", name, js, "*");
-        _gree_unity_webview_evaluateJS(name, script);
+        //string script = string.Format(@"
+        //    var iframe = document.getElementById('webview_{0}');
+        //    var message = '{1}';
+        //    var targetOrigin = '{2}';
+        //    iframe.contentWindow.postMessage(message, targetOrigin);
+        //", name, js, "*");
+        _gree_unity_webview_evaluateJS(name, js);
 #if !UNITY_EDITOR
             _gree_unity_webview_evaluateJS(name, script);
 #endif
