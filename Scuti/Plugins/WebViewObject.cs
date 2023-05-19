@@ -885,6 +885,7 @@ public class WebViewObject : MonoBehaviour, IWebView
             var targetOrigin = '{2}';
             iframe.contentWindow.postMessage(message, targetOrigin);
         ", name, js, "*");
+        _gree_unity_webview_evaluateJS(name, script);
 #if !UNITY_EDITOR
             _gree_unity_webview_evaluateJS(name, script);
 #endif
