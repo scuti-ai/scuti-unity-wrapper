@@ -834,6 +834,7 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     public void LoadURL(string url)
     {
+        ClearCache(true);
         if (string.IsNullOrEmpty(url))
             return;
 #if UNITY_WEBGL
@@ -852,6 +853,15 @@ public class WebViewObject : MonoBehaviour, IWebView
         if (webView == null)
             return;
         webView.Call("LoadURL", url);
+#endif
+    }
+
+    public bool LoadAsync()
+    {
+#if UNITY_WSA
+        return true;
+#else
+        return false;
 #endif
     }
 
@@ -878,6 +888,7 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     public void EvaluateJS(string js)
     {
+        if (string.IsNullOrEmpty(js)) return;
 #if UNITY_WEBGL
         string script = string.Format(@"
             var iframe = document.getElementById('webview_{0}');
