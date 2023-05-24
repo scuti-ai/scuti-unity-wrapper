@@ -898,7 +898,7 @@ public class WebViewObject : MonoBehaviour, IWebView
         //", name, js, "*");
         _gree_unity_webview_evaluateJS(name, js);
 #if !UNITY_EDITOR
-            _gree_unity_webview_evaluateJS(name, script);
+            //_gree_unity_webview_evaluateJS(name, script);
 #endif
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.evaluateJS", name, js);
