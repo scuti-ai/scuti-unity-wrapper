@@ -285,7 +285,8 @@ public class WebViewObject : MonoBehaviour, IWebView
         {
             _pageLoaded = true;
             Debug.Log("page loaded::"+_url);
-            GetComponent<ScutiWebView>().DoShow();
+            onLoaded(_url);
+            //GetComponent<ScutiWebView>().DoShow(_firstTime);
         } else if(e.Type == ProgressChangeType.Failed)
         {
             Debug.LogError("failed to load page");
@@ -295,6 +296,7 @@ public class WebViewObject : MonoBehaviour, IWebView
     private void OnVuplexMessageEmmitted(object sender, EventArgs<string> e)
     {
         Debug.Log( "Message From HTML: " + e.Value);
+        CallFromJS(e.Value);
         //ParseRaw(e.Value); 
     }
 #endif
@@ -773,8 +775,10 @@ public class WebViewObject : MonoBehaviour, IWebView
 #endif
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.setVisibility", name, v);
+#elif UNITY_WSA
+        TargetWebCanvas.gameObject.SetActive(v);
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
-        //TODO: UNSUPPORTED
+//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         if (webView == IntPtr.Zero)
             return;

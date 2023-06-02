@@ -12,7 +12,7 @@ public class ScutiButton : MonoBehaviour
 
     private void Awake()
     {
-        NotificationIcon.SetActive(true);
+        NotificationIcon.SetActive(false);
         NewItems?.SetActive(false);
     }
 
