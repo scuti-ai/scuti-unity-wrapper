@@ -12,7 +12,7 @@ var unityWebView =
         var clonedTop = parseInt($last.css('top')) - 100;
         var $clone = $last.clone().insertAfter($last).css('top', clonedTop + '%');
         var $iframe =
-            $('<iframe style="position:relative; width:100%; height100%; border-style:none; display:none; pointer-events:auto;"></iframe>')
+            $('<iframe style="position:relative; width:100%; height:100%; border-style:none; display:none; pointer-events:auto;"></iframe>')
             .attr('id', 'webview_' + name)
             .appendTo($last)
             .on('load', function () {
@@ -105,7 +105,6 @@ var unityWebView =
     },
 
     loadURL: function(name, url) {
-        console.log(">>>new url", url);
         this.iframe(name).attr('loaded', 'false')[0].contentWindow.location.replace(url);
     },
 
@@ -113,7 +112,6 @@ var unityWebView =
         var prefix = "ld:";
         if (js.startsWith(prefix)) {
             var result = js.substring(prefix.length);
-            // console.log("EVAL JS ON GREE", result);
             eval(result);
         }else{
             this.sendMessageToIframe(name, js);
