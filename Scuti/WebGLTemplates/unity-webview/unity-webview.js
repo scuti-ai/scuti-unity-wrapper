@@ -12,7 +12,7 @@ var unityWebView =
         var clonedTop = parseInt($last.css('top')) - 100;
         var $clone = $last.clone().insertAfter($last).css('top', clonedTop + '%');
         var $iframe =
-            $('<iframe style="position:relative; width:100%; height100%; border-style:none; display:none; pointer-events:auto;"></iframe>')
+            $('<iframe style="position:relative; width:100%; height:100%; border-style:none; display:none; pointer-events:auto;"></iframe>')
             .attr('id', 'webview_' + name)
             .appendTo($last)
             .on('load', function () {
@@ -45,10 +45,35 @@ var unityWebView =
 
                 unityInstance.SendMessage(name, "CallOnLoaded", location.href);
             });
+
+            
+        window.addEventListener('message', event => {
+            const { data } = event;
+
+            switch (data.message) {
+                case 'BACK_TO_THE_GAME':
+                case 'LOG_OUT':
+                case 'STORE_IS_READY':
+                case 'SCUTI_EXCHANGE':
+                case 'USER_TOKEN':
+                case 'NEW_REWARDS':
+                case 'NEW_PRODUCTS':
+                    this.onRecievedMessage(data);
+                    
+                    break;
+
+                default:
+                    break;
+            }
+        });
     },
 
     sendMessage: function (name, message) {
         unityInstance.SendMessage(name, "CallFromJS", message);
+    },
+
+    onRecievedMessage(message) {
+        Unity.call(JSON.stringify(message));
     },
 
     setMargins: function (name, left, top, right, bottom) {
@@ -80,12 +105,36 @@ var unityWebView =
     },
 
     evaluateJS: function (name, js) {
+        var prefix = "ld:";
+        if (js.startsWith(prefix)) {
+            var result = js.substring(prefix.length);
+            eval(result);
+        }else{
+            this.sendMessageToIframe(name, js);
+        }
+    },
+
+    sendMessageToIframe (name,message){
         $iframe = this.iframe(name);
-        if ($iframe.attr('loaded') === 'true') {
-            $iframe[0].contentWindow.eval(js);
-        } else {
+        var targetOrigin = '*';
+        
+        if(message.includes("getNewProducts")){
+            message = "{ message: 'GET_NEW_PRODUCTS' }";
+        }else if (message.includes("getNewRewards")) {
+            message = "{ message: 'GET_NEW_REWARDS' }";
+        }else if(message.includes("toggleStore")){
+            var messageObj = {
+                message: 'TOGGLE_STORE',
+                payload: true
+              };
+              message = JSON.stringify(messageObj);
+        }
+        console.log("SEND MESSAGE TO IFRAME ON GREE", name, message);
+        if ($iframe.contentWindow) {
+            $iframe.contentWindow.postMessage(message, targetOrigin);
+        }else{
             $iframe.on('load', function(){
-                $(this)[0].contentWindow.eval(js);
+                $(this)[0].contentWindow.postMessage(message, targetOrigin);
             });
         }
     },
@@ -96,35 +145,6 @@ var unityWebView =
 
     iframe: function (name) {
         return $('#webview_' + name);
-    },
-
-   callIframe: function(name) {
-        var iframeWindow = this.iframe();
-    
-        iframeWindow.addEventListener("load", function() {
-            var doc = iframe.contentDocument || iframe.contentWindow.document;
-            var target = doc.getElementById("my-target-id");
-    
-            target.innerHTML = "Found it!";
-        });
-    },
-
-    messageListener : function (event) {
-        const { data } = event;
-        this.sendMessage(data.message, data.message);
-        // if (data.message === 'BACK_TO_THE_GAME') {}
-        // if (data.message === 'SCUTI_EXCHANGE') {}
-        // if (data.message === 'GET_NEW_REWARDS') {}
-        // if (data.message === 'GET_NEW_PRODUCTS') {}
-        // if (data.message === 'INIT_SDK') {}
-        // if (data.message === 'END_SESSION') {}
-
-    },
-    
+    },    
 
 };
-
-
-window.addEventListener('message', event => {
-        console.log(event.data);
-});
