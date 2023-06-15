@@ -129,7 +129,6 @@ var unityWebView =
               };
               message = JSON.stringify(messageObj);
         }
-        console.log("SEND MESSAGE TO IFRAME ON GREE", name, message);
         if ($iframe.contentWindow) {
             $iframe.contentWindow.postMessage(message, targetOrigin);
         }else{
