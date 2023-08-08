@@ -194,7 +194,7 @@ public class WebViewObject : MonoBehaviour, IWebView
                 && (Screen.autorotateToPortrait || Screen.autorotateToPortraitUpsideDown));
     }
 #elif UNITY_WSA
-    
+
     Vuplex.WebView.IWebView webView;
     Canvas TargetWebCanvas;
     CanvasWebViewPrefab _canvasWebView;
@@ -284,10 +284,11 @@ public class WebViewObject : MonoBehaviour, IWebView
         if (e.Type == ProgressChangeType.Finished)
         {
             _pageLoaded = true;
-            Debug.Log("page loaded::"+_url);
+            Debug.Log("page loaded::" + _url);
             onLoaded(_url);
             //GetComponent<ScutiWebView>().DoShow(_firstTime);
-        } else if(e.Type == ProgressChangeType.Failed)
+        }
+        else if (e.Type == ProgressChangeType.Failed)
         {
             Debug.LogError("failed to load page");
         }
@@ -295,7 +296,7 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     private void OnVuplexMessageEmmitted(object sender, EventArgs<string> e)
     {
-        Debug.Log( "Message From HTML: " + e.Value);
+        Debug.Log("Message From HTML: " + e.Value);
         CallFromJS(e.Value);
         //ParseRaw(e.Value); 
     }
@@ -483,9 +484,9 @@ public class WebViewObject : MonoBehaviour, IWebView
         string ua = "",
         // android
         int androidForceDarkMode = 0,  // 0: follow system setting, 1: force dark off, 2: force dark on
-        // ios
+                                       // ios
         bool enableWKWebView = true,
-        int  wkContentMode = 0,  // 0: recommended, 1: mobile, 2: desktop
+        int wkContentMode = 0,  // 0: recommended, 1: mobile, 2: desktop
         bool wkAllowsLinkPreview = true,
         // editor
         bool separated = false)
@@ -508,7 +509,7 @@ public class WebViewObject : MonoBehaviour, IWebView
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.init", name);
 #elif UNITY_WSA
-        
+
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         ScutiLogger.LogError("Webview is not supported on this platform.");
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
@@ -932,6 +933,7 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     public void LoadURL(string url)
     {
+        ClearCache(true);
         if (string.IsNullOrEmpty(url))
             return;
 #if UNITY_WEBGL
@@ -941,7 +943,7 @@ public class WebViewObject : MonoBehaviour, IWebView
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.loadURL", name, url);
 #elif UNITY_WSA
-        Debug.Log("---> LoadURL::initialized:" + _initialized+ "  url:"+ url);
+        Debug.Log("---> LoadURL::initialized:" + _initialized + "  url:" + url);
 
         if (_initialized)
             webView.LoadUrl(url);
@@ -983,11 +985,12 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     private void JSResponse(string res)
     {
-        Debug.Log("  >>> EvaluateJS::Response::"+res);
+        Debug.Log("  >>> EvaluateJS::Response::" + res);
     }
 
     public void EvaluateJS(string js)
     {
+        if (string.IsNullOrEmpty(js)) return;
 #if UNITY_WEBGL
 #if !UNITY_EDITOR
         _gree_unity_webview_evaluateJS(name, js);
