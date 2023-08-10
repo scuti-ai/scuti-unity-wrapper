@@ -267,6 +267,7 @@ public class WebViewObject : MonoBehaviour, IWebView
         {
             webView.LoadUrl(_url);
         }
+        TargetWebCanvas.gameObject.SetActive(false);
     }
 
     private void WebView_ConsoleMessageLogged(object sender, ConsoleMessageEventArgs e)
@@ -777,6 +778,7 @@ public class WebViewObject : MonoBehaviour, IWebView
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.setVisibility", name, v);
 #elif UNITY_WSA
+        if(TargetWebCanvas)
         TargetWebCanvas.gameObject.SetActive(v);
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
 //TODO: UNSUPPORTED
