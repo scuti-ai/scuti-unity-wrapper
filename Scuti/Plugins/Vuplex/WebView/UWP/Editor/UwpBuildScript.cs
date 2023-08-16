@@ -87,16 +87,32 @@ namespace Vuplex.WebView.Editor {
             File.Copy(sourceRuntimeComponentPath, destinationRuntimeComponentPath, true);
         }
 
-        static string _getRuntimeComponentPath() {
+        static string _getRuntimeComponentPath()
+        {
 
-            var expectedPath = Path.Combine(new string[] { Application.dataPath, "Vuplex", "WebView", "UWP", "Plugins", WINDOWS_RUNTIME_COMPONENT_NAME });
-            if (File.Exists(expectedPath)) {
+            //var expectedPath = Path.Combine(new string[] { Application.dataPath, "Vuplex", "WebView", "UWP", "Plugins", WINDOWS_RUNTIME_COMPONENT_NAME });
+            //var expectedPath = Path.GetFullPath(Path.Combine(new string[] { "Library","PackageCache","com.scuti.sdk@bc83b6f93a","Scuti", "Plugins", "Vuplex", "WebView", "UWP", "Plugins", WINDOWS_RUNTIME_COMPONENT_NAME }));
+            var expectedPath = Path.GetFullPath(Path.Combine(new string[] { "Library", "PackageCache" }));
+            string[] dir = Directory.GetDirectories(expectedPath);
+
+            foreach (string folder in dir)
+            {
+                if (folder.Contains("com.scuti.sdk"))
+                {
+                    Debug.Log(folder);
+                    expectedPath = Path.GetFullPath(Path.Combine(new string[] { "Library", "PackageCache", folder, "Scuti", "Plugins", "Vuplex", "WebView", "UWP", "Plugins", WINDOWS_RUNTIME_COMPONENT_NAME }));
+                    break;
+                }
+            }
+            if (File.Exists(expectedPath))
+            {
                 return expectedPath;
             }
             // The Windows Runtime component isn't in the default location (Assets/Vuplex/WebView/UWP/Plugins/{name}).
             // So, let's try to find where it is in the Assets directory.
             var files = Directory.GetFiles(Application.dataPath, WINDOWS_RUNTIME_COMPONENT_NAME, SearchOption.AllDirectories);
-            if (files.Count() == 1) {
+            if (files.Count() == 1)
+            {
                 return files[0];
             }
             throw new Exception($"Vuplex.WebView build error: unable to locate the {WINDOWS_RUNTIME_COMPONENT_NAME} file in the Assets folder. It's not in the default location ({expectedPath}), and {files.Count()} instances of the directory were found in Assets folder.");
