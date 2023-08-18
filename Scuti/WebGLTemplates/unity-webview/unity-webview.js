@@ -115,7 +115,12 @@ var unityWebView =
     },
 
     sendMessageToIframe (name,message){
-        $iframe = this.iframe(name);
+        var $iframelist = this.iframe(name);
+        if($iframelist.length == 0){
+            console.log("cannot find iframe");
+            return;
+        }
+        $iframe = $iframelist[0];
         var targetOrigin = '*';
         
         if(message.includes("getNewProducts")){
@@ -128,6 +133,15 @@ var unityWebView =
                 payload: true
               };
               message = JSON.stringify(messageObj);
+        }else if(message.includes("setGameUserId")){
+            var startIndex = message.indexOf('(') + 1;
+            var endIndex = message.indexOf(')');
+            var userID = message.substring(startIndex, endIndex);
+            var messageObj = {
+                message: 'SET_GAME_USER_ID',
+                payload:  userID
+                };
+                message = JSON.stringify(messageObj);
         }
         if ($iframe.contentWindow) {
             $iframe.contentWindow.postMessage(message, targetOrigin);
@@ -135,6 +149,15 @@ var unityWebView =
             $iframe.on('load', function(){
                 $(this)[0].contentWindow.postMessage(message, targetOrigin);
             });
+            $iframe.onload = function() {
+                var iframeWindow = $iframe.contentWindow;
+                if (iframeWindow) {
+                    iframeWindow.postMessage(message, targetOrigin);
+                } else {
+                    console.error("iframe contentWindow is undefined.");
+                }
+            }
+
         }
     },
 
