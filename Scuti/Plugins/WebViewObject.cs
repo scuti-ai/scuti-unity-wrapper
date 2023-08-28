@@ -987,7 +987,7 @@ public class WebViewObject : MonoBehaviour, IWebView
 
     private void JSResponse(string res)
     {
-        Debug.Log("  >>> EvaluateJS::Response::" + res);
+        
     }
 
     public void EvaluateJS(string js)
