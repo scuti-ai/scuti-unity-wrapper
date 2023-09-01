@@ -132,7 +132,7 @@ var unityWebView =
                 message: 'TOGGLE_STORE',
                 payload: true
               };
-              message = JSON.stringify(messageObj);
+              message = messageObj;
         }else if(message.includes("setGameUserId")){
             var startIndex = message.indexOf('(') + 1;
             var endIndex = message.indexOf(')');
@@ -141,8 +141,8 @@ var unityWebView =
                 message: 'SET_GAME_USER_ID',
                 payload:  userID
                 };
-                message = JSON.stringify(messageObj);
-        }
+                message = messageObj;
+            }
         if ($iframe.contentWindow) {
             $iframe.contentWindow.postMessage(message, targetOrigin);
         }else{
