@@ -121,7 +121,7 @@ var unityWebView =
     sendMessageToIframe (name,message){
         var $iframelist = this.iframe(name);
         if($iframelist.length == 0){
-            console.log("Cannot find iframe");
+            console.log("iframelist is not an array");
             return;
         }
         $iframe = $iframelist[0];
@@ -136,7 +136,7 @@ var unityWebView =
                 message: 'TOGGLE_STORE',
                 payload: true
               };
-              message = messageObj;
+                message = messageObj;
             }else if(message.includes("setGameUserId")){
             var startIndex = message.indexOf('(') + 1;
             var endIndex = message.indexOf(')');
@@ -157,7 +157,7 @@ var unityWebView =
                 var iframeWindow = $iframe.contentWindow;
                 if (iframeWindow) {
                     iframeWindow.postMessage(message, targetOrigin);
-                } else {
+            } else {
                     console.error("iframe contentWindow is undefined.");
                 }
             }
