@@ -302,4 +302,13 @@ public class ScutiEditorWindow : EditorWindow
         GUILayout.Space(15);
         GUILayout.EndArea();
     }
+
+
+    [MenuItem("Scuti/Copy WebGL Template")]
+    static void CopyWebGLTemplates()
+    {
+        FileUtil.CopyFileOrDirectory(ScutiConstants.PACKAGEFOLDERPATH, ScutiConstants.DESTINATIONFOLDERPATH);
+        AssetDatabase.Refresh();
+        Debug.Log("Package folder copied successfully!");
+    }
 }
