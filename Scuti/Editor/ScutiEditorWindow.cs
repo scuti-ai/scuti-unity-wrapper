@@ -307,8 +307,22 @@ public class ScutiEditorWindow : EditorWindow
     [MenuItem("Scuti/Copy WebGL Template")]
     static void CopyWebGLTemplates()
     {
-        FileUtil.CopyFileOrDirectory(ScutiConstants.PACKAGEFOLDERPATH, ScutiConstants.DESTINATIONFOLDERPATH);
-        AssetDatabase.Refresh();
-        Debug.Log("Package folder copied successfully!");
+        try
+        {
+            FileUtil.CopyFileOrDirectory(ScutiConstants.PACKAGEFOLDERPATH, ScutiConstants.DESTINATIONFOLDERPATH);
+            AssetDatabase.Refresh();
+            Debug.Log("Package folder copied successfully!");
+        }
+        catch (System.Exception e)
+        {
+            if(e.GetType() == typeof (IOException))
+            {
+                Debug.LogError("Files were not copied, make sure that there is no other folder called WebGLTemplates in the \"Assets\" folder");
+            }
+            else
+            {
+                Debug.Log(e);
+            }
+        }
     }
 }
