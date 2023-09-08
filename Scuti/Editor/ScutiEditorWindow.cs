@@ -311,17 +311,17 @@ public class ScutiEditorWindow : EditorWindow
         {
             FileUtil.CopyFileOrDirectory(ScutiConstants.PACKAGEFOLDERPATH, ScutiConstants.DESTINATIONFOLDERPATH);
             AssetDatabase.Refresh();
-            Debug.Log("Package folder copied successfully!");
+            ScutiLogger.Log("Package folder copied successfully!");
         }
         catch (System.Exception e)
         {
             if(e.GetType() == typeof (IOException))
             {
-                Debug.LogError("Files were not copied, make sure that there is no other folder called WebGLTemplates in the \"Assets\" folder");
+                ScutiLogger.LogError("Files were not copied, make sure that there is no other folder called WebGLTemplates in the \"Assets\" folder");
             }
             else
             {
-                Debug.Log(e);
+                ScutiLogger.LogError(e);
             }
         }
     }

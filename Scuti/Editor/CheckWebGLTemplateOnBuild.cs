@@ -18,7 +18,7 @@ public class CheckWebGLTemplateOnBuild
 
             if (!folderExists)
             {
-                Debug.LogError("WebGLTemplates folder does not exist. Create the folder using the Scuti menu before building for WebGL.");
+                ScutiLogger.LogError("WebGLTemplates folder does not exist. Create the folder using the Scuti menu before building for WebGL.");
                 return;
             }
         }
