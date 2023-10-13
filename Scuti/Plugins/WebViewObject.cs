@@ -995,7 +995,8 @@ public class WebViewObject : MonoBehaviour, IWebView
         if (string.IsNullOrEmpty(js)) return;
 #if UNITY_WEBGL
 #if !UNITY_EDITOR
-        _gree_unity_webview_evaluateJS(name, js);
+            _gree_unity_webview_evaluateJS(name, js);
+            //_gree_unity_webview_evaluateJS(name, script);
 #endif
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.evaluateJS", name, js);
