@@ -214,6 +214,8 @@ public class WebViewObject : MonoBehaviour, IWebView
         mMarginTopComputed = -9999;
         mMarginRightComputed = -9999;
         mMarginBottomComputed = -9999;
+
+        SetURLPattern("", "", ".*");
     }
 
     public bool IsKeyboardVisible
