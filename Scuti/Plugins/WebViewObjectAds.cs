@@ -48,7 +48,7 @@ public class UnitySendMessageDispatcher
 }
 #endif
 
-public class WebViewObject : MonoBehaviour, IWebView
+public class WebViewObjectAds : MonoBehaviour, IWebView
 {
     Callback onJS;
     Callback onError;
@@ -210,12 +210,10 @@ public class WebViewObject : MonoBehaviour, IWebView
     {
         alertDialogEnabled = true;
         scrollBounceEnabled = true;
-        mMarginLeftComputed = -9999;
-        mMarginTopComputed = -9999;
-        mMarginRightComputed = -9999;
+        mMarginLeftComputed = 50;
+        mMarginTopComputed = 50;
+        mMarginRightComputed = 50;
         mMarginBottomComputed = -9999;
-
-        SetURLPattern("", "", ".*");
     }
 
     public bool IsKeyboardVisible
@@ -906,7 +904,6 @@ public class WebViewObject : MonoBehaviour, IWebView
 #if UNITY_WEBGL
 #if !UNITY_EDITOR
             _gree_unity_webview_evaluateJS(name, js);
-            //_gree_unity_webview_evaluateJS(name, script);
 #endif
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.evaluateJS", name, js);
