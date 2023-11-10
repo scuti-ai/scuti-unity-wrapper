@@ -103,7 +103,7 @@ public class WebViewObject : MonoBehaviour, IWebView
         if (webView == null)
             return;
 
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Escape) && !ScutiSDK.Instance.isAdsViewOpen())
         {
             if (CanGoBack())
             {
