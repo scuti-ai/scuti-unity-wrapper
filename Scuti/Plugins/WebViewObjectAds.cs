@@ -105,14 +105,7 @@ public class WebViewObjectAds : MonoBehaviour, IWebView
 
         if (Input.GetKey(KeyCode.Escape) && ScutiSDK.Instance.isAdsViewOpen())
         {
-            if (CanGoBack())
-            {
-                GoBack();
-            }
-            else
-            {
-                ScutiSDK.Instance.HideAdsWebview();
-            }
+            ScutiSDK.Instance.HideAdsWebview();
         }
         if (mResumedTimestamp != 0.0f && Time.realtimeSinceStartup - mResumedTimestamp > 0.5f)
         {
