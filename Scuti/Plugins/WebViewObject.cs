@@ -85,7 +85,7 @@ public class WebViewObject : MonoBehaviour, IWebView
     bool mIsKeyboardVisible;
     int mWindowVisibleDisplayFrameHeight;
     float mResumedTimestamp;
-    
+
     void OnApplicationPause(bool paused)
     {
         if (webView == null)
@@ -105,15 +105,9 @@ public class WebViewObject : MonoBehaviour, IWebView
 
         if (Input.GetKey(KeyCode.Escape) && !ScutiSDK.Instance.isAdsViewOpen())
         {
-            if (CanGoBack())
-            {
-                GoBack();
-            }
-            else
-            {
-                ScutiSDK.Instance.HideStore();
-            }
+            Back();
         }
+
         if (mResumedTimestamp != 0.0f && Time.realtimeSinceStartup - mResumedTimestamp > 0.5f)
         {
             mResumedTimestamp = 0.0f;
@@ -414,9 +408,9 @@ public class WebViewObject : MonoBehaviour, IWebView
         string ua = "",
         // android
         int androidForceDarkMode = 0,  // 0: follow system setting, 1: force dark off, 2: force dark on
-        // ios
+                                       // ios
         bool enableWKWebView = true,
-        int  wkContentMode = 0,  // 0: recommended, 1: mobile, 2: desktop
+        int wkContentMode = 0,  // 0: recommended, 1: mobile, 2: desktop
         bool wkAllowsLinkPreview = true,
         // editor
         bool separated = false)
@@ -496,6 +490,7 @@ public class WebViewObject : MonoBehaviour, IWebView
                 mWindowVisibleDisplayFrameHeight = Rct.Call<int>("height");
             }
         }
+
 #else
         ScutiLogger.LogError("Webview is not supported on this platform.");
 #endif
@@ -978,6 +973,18 @@ public class WebViewObject : MonoBehaviour, IWebView
             return false;
         return webView.Get<bool>("canGoForward");
 #endif
+    }
+
+    public void Back()
+    {
+        if (CanGoBack())
+        {
+            GoBack();
+        }
+        else
+        {
+            ScutiSDK.Instance.HideStore();
+        }
     }
 
     public void GoBack()
