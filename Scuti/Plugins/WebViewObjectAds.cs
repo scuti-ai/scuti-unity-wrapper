@@ -48,7 +48,7 @@ public class UnitySendMessageDispatcher
 }
 #endif
 
-public class WebViewObject : MonoBehaviour, IWebView
+public class WebViewObjectAds : MonoBehaviour, IWebView
 {
     Callback onJS;
     Callback onError;
@@ -85,7 +85,7 @@ public class WebViewObject : MonoBehaviour, IWebView
     bool mIsKeyboardVisible;
     int mWindowVisibleDisplayFrameHeight;
     float mResumedTimestamp;
-
+    
     void OnApplicationPause(bool paused)
     {
         if (webView == null)
@@ -103,11 +103,10 @@ public class WebViewObject : MonoBehaviour, IWebView
         if (webView == null)
             return;
 
-        if (Input.GetKey(KeyCode.Escape) && !ScutiSDK.Instance.isAdsViewOpen())
+        if (Input.GetKey(KeyCode.Escape) && ScutiSDK.Instance.isAdsViewOpen())
         {
             Back();
         }
-
         if (mResumedTimestamp != 0.0f && Time.realtimeSinceStartup - mResumedTimestamp > 0.5f)
         {
             mResumedTimestamp = 0.0f;
@@ -204,12 +203,10 @@ public class WebViewObject : MonoBehaviour, IWebView
     {
         alertDialogEnabled = true;
         scrollBounceEnabled = true;
-        mMarginLeftComputed = -9999;
-        mMarginTopComputed = -9999;
-        mMarginRightComputed = -9999;
+        mMarginLeftComputed = 50;
+        mMarginTopComputed = 50;
+        mMarginRightComputed = 50;
         mMarginBottomComputed = -9999;
-
-        SetURLPattern("", "", ".*");
     }
 
     public bool IsKeyboardVisible
@@ -490,7 +487,6 @@ public class WebViewObject : MonoBehaviour, IWebView
                 mWindowVisibleDisplayFrameHeight = Rct.Call<int>("height");
             }
         }
-
 #else
         ScutiLogger.LogError("Webview is not supported on this platform.");
 #endif
@@ -901,7 +897,6 @@ public class WebViewObject : MonoBehaviour, IWebView
 #if UNITY_WEBGL
 #if !UNITY_EDITOR
             _gree_unity_webview_evaluateJS(name, js);
-            //_gree_unity_webview_evaluateJS(name, script);
 #endif
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.evaluateJS", name, js);
@@ -935,6 +930,11 @@ public class WebViewObject : MonoBehaviour, IWebView
             return 0;
         return webView.Get<int>("progress");
 #endif
+    }
+
+    public void Back()
+    {
+        ScutiSDK.Instance.HideAdsWebview();
     }
 
     public bool CanGoBack()
@@ -973,18 +973,6 @@ public class WebViewObject : MonoBehaviour, IWebView
             return false;
         return webView.Get<bool>("canGoForward");
 #endif
-    }
-
-    public void Back()
-    {
-        if (CanGoBack())
-        {
-            GoBack();
-        }
-        else
-        {
-            ScutiSDK.Instance.HideStore();
-        }
     }
 
     public void GoBack()
