@@ -103,16 +103,9 @@ public class WebViewObjectAds : MonoBehaviour, IWebView
         if (webView == null)
             return;
 
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Escape) && ScutiSDK.Instance.isAdsViewOpen())
         {
-            if (CanGoBack())
-            {
-                GoBack();
-            }
-            else
-            {
-                ScutiSDK.Instance.HideStore();
-            }
+            Back();
         }
         if (mResumedTimestamp != 0.0f && Time.realtimeSinceStartup - mResumedTimestamp > 0.5f)
         {
@@ -412,9 +405,9 @@ public class WebViewObjectAds : MonoBehaviour, IWebView
         string ua = "",
         // android
         int androidForceDarkMode = 0,  // 0: follow system setting, 1: force dark off, 2: force dark on
-        // ios
+                                       // ios
         bool enableWKWebView = true,
-        int  wkContentMode = 0,  // 0: recommended, 1: mobile, 2: desktop
+        int wkContentMode = 0,  // 0: recommended, 1: mobile, 2: desktop
         bool wkAllowsLinkPreview = true,
         // editor
         bool separated = false)
@@ -937,6 +930,11 @@ public class WebViewObjectAds : MonoBehaviour, IWebView
             return 0;
         return webView.Get<int>("progress");
 #endif
+    }
+
+    public void Back()
+    {
+        ScutiSDK.Instance.HideAdsWebview();
     }
 
     public bool CanGoBack()
