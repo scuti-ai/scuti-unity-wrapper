@@ -19,3 +19,6 @@ When the gamer clicks/taps the Scuti Store prefab button, it will trigger the Sc
 Please check out our integration guide below for a complete walk through of each step. 
 
 [Integration Guide](https://github.com/scuti-ai/scuti-unity-wrapper/wiki/Integration-Guide)
+
+**Known issues**
+For Android devices, the unity project might experience unexpected responses while navigating the Webview when using an `apk` build for testing.  This does not occur when building for Play Store in `aab`.  We recommend to test using an 'aab' build where possible.
