@@ -36,6 +36,7 @@ using UnityEngine.Rendering;
 
 using Callback = System.Action<string>;
 
+ 
 
 public class WebViewObjectAds : MonoBehaviour, IWebView
 {
