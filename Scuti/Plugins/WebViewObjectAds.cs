@@ -36,17 +36,6 @@ using UnityEngine.Rendering;
 
 using Callback = System.Action<string>;
 
-#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-public class UnitySendMessageDispatcher
-{
-    public static void Dispatch(string name, string method, string message)
-    {
-        GameObject obj = GameObject.Find(name);
-        if (obj != null)
-            obj.SendMessage(method, message);
-    }
-}
-#endif
 
 public class WebViewObjectAds : MonoBehaviour, IWebView
 {
