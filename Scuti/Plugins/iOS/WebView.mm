@@ -411,10 +411,13 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
         return;
     } else if (navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame && hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
     
-    NSLog(@"HOOKED %@ ",   navigationAction);    
-    UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
-        decisionHandler(WKNavigationActionPolicyCancel);
-        return;
+    NSLog(@"HOOKED %@ id: %@",   navigationAction, navigationAction.targetFrame.id);  
+    if([navigationAction.targetFrame.id isEqualToString:@"alt-iframe-GV0PL2UV857V90CQHFFK2BVKR8"])
+        {
+        UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return;
+            }
     } else if (![url hasPrefix:@"about:blank"]  // for loadHTML(), cf. #365
                && ![url hasPrefix:@"file:"]
                && ![url hasPrefix:@"http:"]
