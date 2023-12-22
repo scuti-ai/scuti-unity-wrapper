@@ -410,7 +410,7 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     } else if (navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame && navigationAction.navigationType == WKNavigationTypeLinkActivated  && hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
-        NSLog(@"HOOKED %@ id: %@",   navigationAction, navigationAction.targetFrame.id);  
+        NSLog(@"HOOKED %@",   navigationAction);  
         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
             decisionHandler(WKNavigationActionPolicyCancel);
             return;
@@ -425,7 +425,7 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
         return;
     } else if([url rangeOfString:@"g.doubleclick"].location != NSNotFound)
     {
-     NSLog(@"Double HOOKED %@ id: %@",   navigationAction, navigationAction.targetFrame.id);  
+     NSLog(@"Double HOOKED %@  ",   navigationAction );  
         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
             decisionHandler(WKNavigationActionPolicyCancel);
     }
