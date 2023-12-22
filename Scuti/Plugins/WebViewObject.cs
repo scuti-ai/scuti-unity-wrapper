@@ -415,6 +415,7 @@ public class WebViewObject : MonoBehaviour, IWebView
         // editor
         bool separated = false)
     {
+        Debug.LogError("Name for main: " + name);
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         _CWebViewPlugin_InitStatic(
             Application.platform == RuntimePlatform.OSXEditor,

@@ -428,6 +428,7 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
      NSLog(@"Double HOOKED %@  ",   navigationAction );  
         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
             decisionHandler(WKNavigationActionPolicyCancel);
+            return;
     }
     else if (navigationAction.navigationType == WKNavigationTypeLinkActivated
                && (!navigationAction.targetFrame || !navigationAction.targetFrame.isMainFrame)) {
