@@ -439,6 +439,9 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
             }
         }
     }
+
+    
+    NSLog(@"Event through %@", navigationAction.navigationType);
     UnitySendMessage([gameObjectName UTF8String], "CallOnStarted", [url UTF8String]);
     decisionHandler(WKNavigationActionPolicyAllow);
 }
