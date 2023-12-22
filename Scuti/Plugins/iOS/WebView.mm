@@ -409,8 +409,10 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
         UnitySendMessage([gameObjectName UTF8String], "CallFromJS", [[url substringFromIndex:6] UTF8String]);
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
-    } else if (navigationAction.navigationType == WKNavigationTypeLinkActivated && hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
-        UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
+    } else if (navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame && hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
+    
+    NSLog(@"HOOKED %@ ",   navigationAction);    
+    UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     } else if (![url hasPrefix:@"about:blank"]  // for loadHTML(), cf. #365
@@ -441,7 +443,7 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
     }
 
     
-    NSLog(@"Event through %ld action %@ and target frame ", navigationAction.navigationType, navigationAction, navigationAction.targetFrame);
+    NSLog(@"Event through %@ ",   navigationAction);
     UnitySendMessage([gameObjectName UTF8String], "CallOnStarted", [url UTF8String]);
     decisionHandler(WKNavigationActionPolicyAllow);
 }
