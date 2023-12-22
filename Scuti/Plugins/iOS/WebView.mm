@@ -409,15 +409,11 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
         UnitySendMessage([gameObjectName UTF8String], "CallFromJS", [[url substringFromIndex:6] UTF8String]);
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
-    } else if (navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame && hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
-    
-    NSLog(@"HOOKED %@ id: %@",   navigationAction, navigationAction.targetFrame.id);  
-    if([navigationAction.targetFrame.id isEqualToString:@"alt-iframe-GV0PL2UV857V90CQHFFK2BVKR8"])
-        {
+    } else if (navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame && navigationAction.navigationType == WKNavigationTypeLinkActivated  && hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
+        NSLog(@"HOOKED %@ id: %@",   navigationAction, navigationAction.targetFrame.id);  
         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
             decisionHandler(WKNavigationActionPolicyCancel);
             return;
-            }
     } else if (![url hasPrefix:@"about:blank"]  // for loadHTML(), cf. #365
                && ![url hasPrefix:@"file:"]
                && ![url hasPrefix:@"http:"]
@@ -427,7 +423,13 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
         }
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
-    } else if (navigationAction.navigationType == WKNavigationTypeLinkActivated
+    } else if([url rangeOfString:@"g.doubleclick"].location != NSNotFound)
+    {
+     NSLog(@"Double HOOKED %@ id: %@",   navigationAction, navigationAction.targetFrame.id);  
+        UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
+            decisionHandler(WKNavigationActionPolicyCancel);
+    }
+    else if (navigationAction.navigationType == WKNavigationTypeLinkActivated
                && (!navigationAction.targetFrame || !navigationAction.targetFrame.isMainFrame)) {
         // cf. for target="_blank", cf. http://qiita.com/ShingoFukuyama/items/b3a1441025a36ab7659c
         [webView load:navigationAction.request];
