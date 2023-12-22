@@ -409,8 +409,11 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
         UnitySendMessage([gameObjectName UTF8String], "CallFromJS", [[url substringFromIndex:6] UTF8String]);
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
-    } else if (navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame  && hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
-        NSLog(@"HOOKED %@",   navigationAction);  
+    } else if (((navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame) || 
+            (navigationAction.navigationType == WKNavigationTypeLinkActivated && (!navigationAction.targetFrame || !navigationAction.targetFrame.isMainFrame)))
+            
+            && hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
+        NSLog(@"HOOKED %@ in  %@",   navigationAction, [gameObjectName UTF8String]);  
         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
             decisionHandler(WKNavigationActionPolicyCancel);
             return;
@@ -423,20 +426,19 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
         }
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
-    } else if([url rangeOfString:@"g.doubleclick"].location != NSNotFound)
+    }/* else if([url rangeOfString:@"g.doubleclick"].location != NSNotFound)
     {
      NSLog(@"Double HOOKED %@  ",   navigationAction );  
         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
             decisionHandler(WKNavigationActionPolicyCancel);
             return;
     }
-    else if (navigationAction.navigationType == WKNavigationTypeLinkActivated
-               && (!navigationAction.targetFrame || !navigationAction.targetFrame.isMainFrame)) {
+    else if ) {
         // cf. for target="_blank", cf. http://qiita.com/ShingoFukuyama/items/b3a1441025a36ab7659c
         [webView load:navigationAction.request];
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
-    } else {
+    }*/ else {
         if (navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame) {
             // If the custom header is not attached, give it and make a request again.
             if (![self isSetupedCustomHeader:[navigationAction request]]) {
