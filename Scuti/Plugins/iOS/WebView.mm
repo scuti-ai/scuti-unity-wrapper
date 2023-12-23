@@ -413,7 +413,7 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
             (navigationAction.navigationType == WKNavigationTypeLinkActivated ))//&& (!navigationAction.targetFrame || !navigationAction.targetFrame.isMainFrame)))
             
             && (hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)])) {
-        NSLog(@"HOOKED %@",   navigationAction);  
+   
         NSLog(@"HOOKED %@ in  %s",   navigationAction, [gameObjectName UTF8String]);  
         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
             decisionHandler(WKNavigationActionPolicyCancel);
@@ -447,7 +447,7 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
     }
 
     
-    //NSLog(@"Event through %@ ",   navigationAction);
+    NSLog(@"Event through %@ ",   navigationAction);
     UnitySendMessage([gameObjectName UTF8String], "CallOnStarted", [url UTF8String]);
     decisionHandler(WKNavigationActionPolicyAllow);
 }
