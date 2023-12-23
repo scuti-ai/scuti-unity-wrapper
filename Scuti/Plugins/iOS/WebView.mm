@@ -412,7 +412,7 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
     } else if (((navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame) || 
             (navigationAction.navigationType == WKNavigationTypeLinkActivated ))//&& (!navigationAction.targetFrame || !navigationAction.targetFrame.isMainFrame)))
             
-            && (hookRegex == nil || [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)])) {
+            && (hookRegex == nil || [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
         NSLog(@"HOOKED %@",   navigationAction);  
         NSLog(@"HOOKED %@ in  %s",   navigationAction, [gameObjectName UTF8String]);  
         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
