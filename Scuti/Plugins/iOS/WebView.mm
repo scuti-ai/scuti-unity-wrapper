@@ -410,9 +410,9 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     } else if (((navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame) || 
-            (navigationAction.navigationType == WKNavigationTypeLinkActivated && (!navigationAction.targetFrame || !navigationAction.targetFrame.isMainFrame)))
+            (navigationAction.navigationType == WKNavigationTypeLinkActivated ))//&& (!navigationAction.targetFrame || !navigationAction.targetFrame.isMainFrame)))
             
-            && hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
+            && (hookRegex == nil || [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)])) {
         NSLog(@"HOOKED %@",   navigationAction);  
         NSLog(@"HOOKED %@ in  %s",   navigationAction, [gameObjectName UTF8String]);  
         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
@@ -434,12 +434,7 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
             decisionHandler(WKNavigationActionPolicyCancel);
             return;
     }
-    else if ) {
-        // cf. for target="_blank", cf. http://qiita.com/ShingoFukuyama/items/b3a1441025a36ab7659c
-        [webView load:navigationAction.request];
-        decisionHandler(WKNavigationActionPolicyCancel);
-        return;
-    }*/ else {
+     */ else {
         if (navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame) {
             // If the custom header is not attached, give it and make a request again.
             if (![self isSetupedCustomHeader:[navigationAction request]]) {
