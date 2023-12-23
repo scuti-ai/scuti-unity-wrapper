@@ -209,6 +209,7 @@ public class WebViewObject : MonoBehaviour, IWebView
         mMarginRightComputed = -9999;
         mMarginBottomComputed = -9999;
 
+        SetURLPattern("", "", $"^((?!gameId).)*$");
     }
 
     public bool IsKeyboardVisible
