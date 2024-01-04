@@ -194,7 +194,6 @@ public class WebViewObject : MonoBehaviour, IWebView
 	IntPtr webView;
 #endif
 
-        SetURLPattern("", "", $"^((?!gameId).)*$");
 	void Awake()
 	{
 		alertDialogEnabled = true;
@@ -203,6 +202,8 @@ public class WebViewObject : MonoBehaviour, IWebView
 		mMarginTopComputed = -9999;
 		mMarginRightComputed = -9999;
 		mMarginBottomComputed = -9999;
+
+		SetURLPattern("", "", $"^((?!gameId).)*$");
 	}
 
 	public bool IsKeyboardVisible
@@ -856,6 +857,7 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("LoadURL", url);
 #endif
+	}
     public bool LoadAsync()
     {
 #if UNITY_WSA
@@ -864,7 +866,6 @@ public class WebViewObject : MonoBehaviour, IWebView
         return false;
 #endif
     }
-	}
 
 	public void LoadHTML(string html, string baseUrl)
 	{
@@ -1255,6 +1256,18 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("SetTextZoom", textZoom);
 #endif
+	}
+
+	public void Back()
+	{
+		if (CanGoBack())
+		{
+			GoBack();
+		}
+		else
+		{
+			ScutiSDK.Instance.HideStore();
+		}
 	}
 
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX

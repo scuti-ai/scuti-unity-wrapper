@@ -399,8 +399,9 @@ public class WebViewObjectAds : MonoBehaviour, IWebView
         bool enableWKWebView = true,
         int wkContentMode = 0,  // 0: recommended, 1: mobile, 2: desktop
         bool wkAllowsLinkPreview = true,
-        // editor
-        bool separated = false)
+		bool wkAllowsBackForwardNavigationGestures = false,
+		// editor
+		bool separated = false)
     {
 
         Debug.LogError("Name for sub: " + name);
