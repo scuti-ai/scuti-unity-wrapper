@@ -410,6 +410,15 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
         UnitySendMessage([gameObjectName UTF8String], "CallFromJS", [[url substringFromIndex:6] UTF8String]);
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
+    } else if (((navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame) || 
+            (navigationAction.navigationType == WKNavigationTypeLinkActivated ))//&& (!navigationAction.targetFrame || !navigationAction.targetFrame.isMainFrame)))
+
+            && hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
+
+        //NSLog(@"HOOKED %@ in  %s",   navigationAction, [gameObjectName UTF8String]); 
+         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return; 
     } else if (hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
         decisionHandler(WKNavigationActionPolicyCancel);
