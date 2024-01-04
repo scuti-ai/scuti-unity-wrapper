@@ -50,25 +50,25 @@ public class UnitySendMessageDispatcher
 
 public class WebViewObject : MonoBehaviour, IWebView
 {
-    Callback onJS;
-    Callback onError;
-    Callback onHttpError;
-    Callback onStarted;
-    Callback onLoaded;
-    Callback onHooked;
-    bool visibility;
-    bool alertDialogEnabled;
-    bool scrollBounceEnabled;
-    int mMarginLeft;
-    int mMarginTop;
-    int mMarginRight;
-    int mMarginBottom;
-    bool mMarginRelative;
-    float mMarginLeftComputed;
-    float mMarginTopComputed;
-    float mMarginRightComputed;
-    float mMarginBottomComputed;
-    bool mMarginRelativeComputed;
+	Callback onJS;
+	Callback onError;
+	Callback onHttpError;
+	Callback onStarted;
+	Callback onLoaded;
+	Callback onHooked;
+	bool visibility;
+	bool alertDialogEnabled;
+	bool scrollBounceEnabled;
+	int mMarginLeft;
+	int mMarginTop;
+	int mMarginRight;
+	int mMarginBottom;
+	bool mMarginRelative;
+	float mMarginLeftComputed;
+	float mMarginTopComputed;
+	float mMarginRightComputed;
+	float mMarginBottomComputed;
+	bool mMarginRelativeComputed;
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
     IntPtr webView;
     Rect rect;
@@ -85,7 +85,7 @@ public class WebViewObject : MonoBehaviour, IWebView
     bool mIsKeyboardVisible;
     int mWindowVisibleDisplayFrameHeight;
     float mResumedTimestamp;
-
+    
     void OnApplicationPause(bool paused)
     {
         if (webView == null)
@@ -102,12 +102,6 @@ public class WebViewObject : MonoBehaviour, IWebView
     {
         if (webView == null)
             return;
-
-        if (Input.GetKey(KeyCode.Escape) && !ScutiSDK.Instance.isAdsViewOpen())
-        {
-            Back();
-        }
-
         if (mResumedTimestamp != 0.0f && Time.realtimeSinceStartup - mResumedTimestamp > 0.5f)
         {
             mResumedTimestamp = 0.0f;
@@ -197,34 +191,33 @@ public class WebViewObject : MonoBehaviour, IWebView
                 && (Screen.autorotateToPortrait || Screen.autorotateToPortraitUpsideDown));
     }
 #else
-    IntPtr webView;
+	IntPtr webView;
 #endif
 
-    void Awake()
-    {
-        alertDialogEnabled = true;
-        scrollBounceEnabled = true;
-        mMarginLeftComputed = -9999;
-        mMarginTopComputed = -9999;
-        mMarginRightComputed = -9999;
-        mMarginBottomComputed = -9999;
-
         SetURLPattern("", "", $"^((?!gameId).)*$");
-    }
+	void Awake()
+	{
+		alertDialogEnabled = true;
+		scrollBounceEnabled = true;
+		mMarginLeftComputed = -9999;
+		mMarginTopComputed = -9999;
+		mMarginRightComputed = -9999;
+		mMarginBottomComputed = -9999;
+	}
 
-    public bool IsKeyboardVisible
-    {
-        get
-        {
+	public bool IsKeyboardVisible
+	{
+		get
+		{
 #if !UNITY_EDITOR && UNITY_ANDROID
             return mIsKeyboardVisible;
 #elif !UNITY_EDITOR && UNITY_IPHONE
             return TouchScreenKeyboard.visible;
 #else
-            return false;
+			return false;
 #endif
-        }
-    }
+		}
+	}
 
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
     [DllImport("WebView")]
@@ -303,7 +296,7 @@ public class WebViewObject : MonoBehaviour, IWebView
     private static extern string _CWebViewPlugin_GetMessage(IntPtr instance);
 #elif UNITY_IPHONE
     [DllImport("__Internal")]
-    private static extern IntPtr _CWebViewPlugin_Init(string gameObject, bool transparent, bool zoom, string ua, bool enableWKWebView, int wkContentMode, bool wkAllowsLinkPreview);
+    private static extern IntPtr _CWebViewPlugin_Init(string gameObject, bool transparent, bool zoom, string ua, bool enableWKWebView, int wkContentMode, bool wkAllowsLinkPreview, bool wkAllowsBackForwardNavigationGestures);
     [DllImport("__Internal")]
     private static extern int _CWebViewPlugin_Destroy(IntPtr instance);
     [DllImport("__Internal")]
@@ -373,60 +366,60 @@ public class WebViewObject : MonoBehaviour, IWebView
     [DllImport("__Internal")]
     private static extern void   _CWebViewPlugin_ClearCache(IntPtr instance, bool includeDiskFiles);
 #elif UNITY_WEBGL
-    [DllImport("__Internal")]
-    private static extern void _gree_unity_webview_init(string name);
-    [DllImport("__Internal")]
-    private static extern void _gree_unity_webview_setMargins(string name, int left, int top, int right, int bottom);
-    [DllImport("__Internal")]
-    private static extern void _gree_unity_webview_setVisibility(string name, bool visible);
-    [DllImport("__Internal")]
-    private static extern void _gree_unity_webview_loadURL(string name, string url);
-    [DllImport("__Internal")]
-    private static extern void _gree_unity_webview_evaluateJS(string name, string js);
-    [DllImport("__Internal")]
-    private static extern void _gree_unity_webview_destroy(string name);
+	[DllImport("__Internal")]
+	private static extern void _gree_unity_webview_init(string name);
+	[DllImport("__Internal")]
+	private static extern void _gree_unity_webview_setMargins(string name, int left, int top, int right, int bottom);
+	[DllImport("__Internal")]
+	private static extern void _gree_unity_webview_setVisibility(string name, bool visible);
+	[DllImport("__Internal")]
+	private static extern void _gree_unity_webview_loadURL(string name, string url);
+	[DllImport("__Internal")]
+	private static extern void _gree_unity_webview_evaluateJS(string name, string js);
+	[DllImport("__Internal")]
+	private static extern void _gree_unity_webview_destroy(string name);
 #endif
 
-    public static bool IsWebViewAvailable()
-    {
+	public static bool IsWebViewAvailable()
+	{
 #if !UNITY_EDITOR && UNITY_ANDROID
         return (new AndroidJavaObject("net.gree.unitywebview.CWebViewPlugin")).CallStatic<bool>("IsWebViewAvailable");
 #else
-        return true;
+		return true;
 #endif
-    }
+	}
 
-    public void Init(
-        Callback cb = null,
-        Callback err = null,
-        Callback httpErr = null,
-        Callback ld = null,
-        Callback started = null,
-        Callback hooked = null,
-        bool transparent = false,
-        bool zoom = true,
-        string ua = "",
-        // android
-        int androidForceDarkMode = 0,  // 0: follow system setting, 1: force dark off, 2: force dark on
-                                       // ios
-        bool enableWKWebView = true,
-        int wkContentMode = 0,  // 0: recommended, 1: mobile, 2: desktop
-        bool wkAllowsLinkPreview = true,
-        // editor
-        bool separated = false)
-    {
-        Debug.LogError("Name for main: " + name);
+	public void Init(
+		Callback cb = null,
+		Callback err = null,
+		Callback httpErr = null,
+		Callback ld = null,
+		Callback started = null,
+		Callback hooked = null,
+		bool transparent = false,
+		bool zoom = true,
+		string ua = "",
+		// android
+		int androidForceDarkMode = 0,  // 0: follow system setting, 1: force dark off, 2: force dark on
+									   // ios
+		bool enableWKWebView = true,
+		int wkContentMode = 0,  // 0: recommended, 1: mobile, 2: desktop
+		bool wkAllowsLinkPreview = true,
+		bool wkAllowsBackForwardNavigationGestures = true,
+		// editor
+		bool separated = false)
+	{
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         _CWebViewPlugin_InitStatic(
             Application.platform == RuntimePlatform.OSXEditor,
             SystemInfo.graphicsDeviceType == GraphicsDeviceType.Metal);
 #endif
-        onJS = cb;
-        onError = err;
-        onHttpError = httpErr;
-        onStarted = started;
-        onLoaded = ld;
-        onHooked = hooked;
+		onJS = cb;
+		onError = err;
+		onHttpError = httpErr;
+		onStarted = started;
+		onLoaded = ld;
+		onHooked = hooked;
 #if UNITY_WEBGL
 #if !UNITY_EDITOR
         _gree_unity_webview_init(name);
@@ -434,7 +427,8 @@ public class WebViewObject : MonoBehaviour, IWebView
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.init", name);
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
-        ScutiLogger.LogError("Webview is not supported on this platform.");
+        //TODO: UNSUPPORTED
+        Debug.LogError("Webview is not supported on this platform.");
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         {
             var uri = new Uri(_CWebViewPlugin_GetAppPath());
@@ -477,7 +471,7 @@ public class WebViewObject : MonoBehaviour, IWebView
         rect = new Rect(0, 0, Screen.width, Screen.height);
         OnApplicationFocus(true);
 #elif UNITY_IPHONE
-        webView = _CWebViewPlugin_Init(name, transparent, zoom, ua, enableWKWebView, wkContentMode, wkAllowsLinkPreview);
+        webView = _CWebViewPlugin_Init(name, transparent, zoom, ua, enableWKWebView, wkContentMode, wkAllowsLinkPreview, wkAllowsBackForwardNavigationGestures);
 #elif UNITY_ANDROID
         webView = new AndroidJavaObject("net.gree.unitywebview.CWebViewPlugin");
         webView.Call("Init", name, transparent, zoom, androidForceDarkMode, ua);
@@ -491,14 +485,13 @@ public class WebViewObject : MonoBehaviour, IWebView
                 mWindowVisibleDisplayFrameHeight = Rct.Call<int>("height");
             }
         }
-
 #else
         ScutiLogger.LogError("Webview is not supported on this platform.");
 #endif
-    }
+	}
 
-    protected virtual void OnDestroy()
-    {
+	protected virtual void OnDestroy()
+	{
 #if UNITY_WEBGL
 #if !UNITY_EDITOR
         _gree_unity_webview_destroy(name);
@@ -524,12 +517,12 @@ public class WebViewObject : MonoBehaviour, IWebView
         webView.Call("Destroy");
         webView = null;
 #endif
-    }
+	}
 
-    public void Pause()
-    {
+	public void Pause()
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
@@ -541,12 +534,12 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("Pause");
 #endif
-    }
+	}
 
-    public void Resume()
-    {
+	public void Resume()
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
@@ -558,14 +551,14 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("Resume");
 #endif
-    }
+	}
 
-    // Use this function instead of SetMargins to easily set up a centered window
-    // NOTE: for historical reasons, `center` means the lower left corner and positive y values extend up.
-    public void SetCenterPositionWithScale(Vector2 center, Vector2 scale)
-    {
+	// Use this function instead of SetMargins to easily set up a centered window
+	// NOTE: for historical reasons, `center` means the lower left corner and positive y values extend up.
+	public void SetCenterPositionWithScale(Vector2 center, Vector2 scale)
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #else
@@ -575,13 +568,13 @@ public class WebViewObject : MonoBehaviour, IWebView
         float top = Screen.height - (bottom + scale.y);
         SetMargins((int)left, (int)top, (int)right, (int)bottom);
 #endif
-    }
+	}
 
-    public void SetMargins(int left, int top, int right, int bottom, bool relative = false)
-    {
+	public void SetMargins(int left, int top, int right, int bottom, bool relative = false)
+	{
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
-        //TODO: UNSUPPORTED
-        return;
+		//TODO: UNSUPPORTED
+		return;
 #elif UNITY_WEBPLAYER || UNITY_WEBGL
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         if (webView == IntPtr.Zero)
@@ -594,14 +587,14 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
 #endif
 
-        mMarginLeft = left;
-        mMarginTop = top;
-        mMarginRight = right;
-        mMarginBottom = bottom;
-        mMarginRelative = relative;
-        float ml, mt, mr, mb;
+		mMarginLeft = left;
+		mMarginTop = top;
+		mMarginRight = right;
+		mMarginBottom = bottom;
+		mMarginRelative = relative;
+		float ml, mt, mr, mb;
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_WEBPLAYER || UNITY_WEBGL
         ml = left;
         mt = top;
@@ -649,24 +642,24 @@ public class WebViewObject : MonoBehaviour, IWebView
             mb = AdjustBottomMargin(bottom);
         }
 #endif
-        bool r = relative;
+		bool r = relative;
 
-        if (ml == mMarginLeftComputed
-            && mt == mMarginTopComputed
-            && mr == mMarginRightComputed
-            && mb == mMarginBottomComputed
-            && r == mMarginRelativeComputed)
-        {
-            return;
-        }
-        mMarginLeftComputed = ml;
-        mMarginTopComputed = mt;
-        mMarginRightComputed = mr;
-        mMarginBottomComputed = mb;
-        mMarginRelativeComputed = r;
+		if (ml == mMarginLeftComputed
+			&& mt == mMarginTopComputed
+			&& mr == mMarginRightComputed
+			&& mb == mMarginBottomComputed
+			&& r == mMarginRelativeComputed)
+		{
+			return;
+		}
+		mMarginLeftComputed = ml;
+		mMarginTopComputed = mt;
+		mMarginRightComputed = mr;
+		mMarginBottomComputed = mb;
+		mMarginRelativeComputed = r;
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.setMargins", name, (int)ml, (int)mt, (int)mr, (int)mb);
 #elif UNITY_WEBGL && !UNITY_EDITOR
@@ -681,10 +674,10 @@ public class WebViewObject : MonoBehaviour, IWebView
 #elif UNITY_ANDROID
         webView.Call("SetMargins", (int)ml, (int)mt, (int)mr, (int)mb);
 #endif
-    }
+	}
 
-    public void SetVisibility(bool v)
-    {
+	public void SetVisibility(bool v)
+	{
 #if UNITY_WEBGL
 #if !UNITY_EDITOR
         _gree_unity_webview_setVisibility(name, v);
@@ -707,16 +700,16 @@ public class WebViewObject : MonoBehaviour, IWebView
         mVisibility = v;
         webView.Call("SetVisibility", v);
 #endif
-        visibility = v;
-    }
+		visibility = v;
+	}
 
-    public bool GetVisibility()
-    {
-        return visibility;
-    }
+	public bool GetVisibility()
+	{
+		return visibility;
+	}
 
-    public void SetScrollbarsVisibility(bool v)
-    {
+	public void SetScrollbarsVisibility(bool v)
+	{
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         // TODO: UNSUPPORTED
 #elif UNITY_IPHONE
@@ -728,12 +721,12 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("SetScrollbarsVisibility", v);
 #else
-        // TODO: UNSUPPORTED
+		// TODO: UNSUPPORTED
 #endif
-    }
+	}
 
-    public void SetInteractionEnabled(bool enabled)
-    {
+	public void SetInteractionEnabled(bool enabled)
+	{
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         // TODO: UNSUPPORTED
 #elif UNITY_IPHONE
@@ -745,12 +738,12 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("SetInteractionEnabled", enabled);
 #else
-        // TODO: UNSUPPORTED
+		// TODO: UNSUPPORTED
 #endif
-    }
+	}
 
-    public void SetAlertDialogEnabled(bool e)
-    {
+	public void SetAlertDialogEnabled(bool e)
+	{
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         // TODO: UNSUPPORTED
 #elif UNITY_IPHONE
@@ -762,18 +755,18 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("SetAlertDialogEnabled", e);
 #else
-        // TODO: UNSUPPORTED
+		// TODO: UNSUPPORTED
 #endif
-        alertDialogEnabled = e;
-    }
+		alertDialogEnabled = e;
+	}
 
-    public bool GetAlertDialogEnabled()
-    {
-        return alertDialogEnabled;
-    }
+	public bool GetAlertDialogEnabled()
+	{
+		return alertDialogEnabled;
+	}
 
-    public void SetScrollBounceEnabled(bool e)
-    {
+	public void SetScrollBounceEnabled(bool e)
+	{
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         // TODO: UNSUPPORTED
 #elif UNITY_IPHONE
@@ -783,18 +776,18 @@ public class WebViewObject : MonoBehaviour, IWebView
 #elif UNITY_ANDROID
         // TODO: UNSUPPORTED
 #else
-        // TODO: UNSUPPORTED
+		// TODO: UNSUPPORTED
 #endif
-        scrollBounceEnabled = e;
-    }
+		scrollBounceEnabled = e;
+	}
 
-    public bool GetScrollBounceEnabled()
-    {
-        return scrollBounceEnabled;
-    }
+	public bool GetScrollBounceEnabled()
+	{
+		return scrollBounceEnabled;
+	}
 
-    public void SetCameraAccess(bool allowed)
-    {
+	public void SetCameraAccess(bool allowed)
+	{
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         // TODO: UNSUPPORTED
 #elif UNITY_IPHONE
@@ -804,12 +797,12 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("SetCameraAccess", allowed);
 #else
-        // TODO: UNSUPPORTED
+		// TODO: UNSUPPORTED
 #endif
-    }
+	}
 
-    public void SetMicrophoneAccess(bool allowed)
-    {
+	public void SetMicrophoneAccess(bool allowed)
+	{
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
         // TODO: UNSUPPORTED
 #elif UNITY_IPHONE
@@ -819,15 +812,15 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("SetMicrophoneAccess", allowed);
 #else
-        // TODO: UNSUPPORTED
+		// TODO: UNSUPPORTED
 #endif
-    }
+	}
 
-    public bool SetURLPattern(string allowPattern, string denyPattern, string hookPattern)
-    {
+	public bool SetURLPattern(string allowPattern, string denyPattern, string hookPattern)
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
-        return false;
+		//TODO: UNSUPPORTED
+		return false;
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
         return false;
@@ -840,13 +833,12 @@ public class WebViewObject : MonoBehaviour, IWebView
             return false;
         return webView.Call<bool>("SetURLPattern", allowPattern, denyPattern, hookPattern);
 #endif
-    }
+	}
 
-    public void LoadURL(string url)
-    {
-        ClearCache(true);
-        if (string.IsNullOrEmpty(url))
-            return;
+	public void LoadURL(string url)
+	{
+		if (string.IsNullOrEmpty(url))
+			return;
 #if UNITY_WEBGL
 #if !UNITY_EDITOR
         _gree_unity_webview_loadURL(name, url);
@@ -864,8 +856,6 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("LoadURL", url);
 #endif
-    }
-
     public bool LoadAsync()
     {
 #if UNITY_WSA
@@ -874,15 +864,16 @@ public class WebViewObject : MonoBehaviour, IWebView
         return false;
 #endif
     }
+	}
 
-    public void LoadHTML(string html, string baseUrl)
-    {
-        if (string.IsNullOrEmpty(html))
-            return;
-        if (string.IsNullOrEmpty(baseUrl))
-            baseUrl = "";
+	public void LoadHTML(string html, string baseUrl)
+	{
+		if (string.IsNullOrEmpty(html))
+			return;
+		if (string.IsNullOrEmpty(baseUrl))
+			baseUrl = "";
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IPHONE
@@ -894,15 +885,13 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("LoadHTML", html, baseUrl);
 #endif
-    }
+	}
 
-    public void EvaluateJS(string js)
-    {
-        if (string.IsNullOrEmpty(js)) return;
+	public void EvaluateJS(string js)
+	{
 #if UNITY_WEBGL
 #if !UNITY_EDITOR
-            _gree_unity_webview_evaluateJS(name, js);
-            //_gree_unity_webview_evaluateJS(name, script);
+        _gree_unity_webview_evaluateJS(name, js);
 #endif
 #elif UNITY_WEBPLAYER
         Application.ExternalCall("unityWebView.evaluateJS", name, js);
@@ -917,13 +906,13 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("EvaluateJS", js);
 #endif
-    }
+	}
 
-    public int Progress()
-    {
+	public int Progress()
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
-        return 0;
+		//TODO: UNSUPPORTED
+		return 0;
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
         return 0;
@@ -936,13 +925,13 @@ public class WebViewObject : MonoBehaviour, IWebView
             return 0;
         return webView.Get<int>("progress");
 #endif
-    }
+	}
 
-    public bool CanGoBack()
-    {
+	public bool CanGoBack()
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
-        return false;
+		//TODO: UNSUPPORTED
+		return false;
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
         return false;
@@ -955,13 +944,13 @@ public class WebViewObject : MonoBehaviour, IWebView
             return false;
         return webView.Get<bool>("canGoBack");
 #endif
-    }
+	}
 
-    public bool CanGoForward()
-    {
+	public bool CanGoForward()
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
-        return false;
+		//TODO: UNSUPPORTED
+		return false;
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
         return false;
@@ -974,24 +963,12 @@ public class WebViewObject : MonoBehaviour, IWebView
             return false;
         return webView.Get<bool>("canGoForward");
 #endif
-    }
+	}
 
-    public void Back()
-    {
-        if (CanGoBack())
-        {
-            GoBack();
-        }
-        else
-        {
-            ScutiSDK.Instance.HideStore();
-        }
-    }
-
-    public void GoBack()
-    {
+	public void GoBack()
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IPHONE
@@ -1003,12 +980,12 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("GoBack");
 #endif
-    }
+	}
 
-    public void GoForward()
-    {
+	public void GoForward()
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IPHONE
@@ -1020,12 +997,12 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("GoForward");
 #endif
-    }
+	}
 
-    public void Reload()
-    {
+	public void Reload()
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IPHONE
@@ -1037,75 +1014,75 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("Reload");
 #endif
-    }
+	}
 
-    public void CallOnError(string error)
-    {
-        if (onError != null)
-        {
-            onError(error);
-        }
-    }
+	public void CallOnError(string error)
+	{
+		if (onError != null)
+		{
+			onError(error);
+		}
+	}
 
-    public void CallOnHttpError(string error)
-    {
-        if (onHttpError != null)
-        {
-            onHttpError(error);
-        }
-    }
+	public void CallOnHttpError(string error)
+	{
+		if (onHttpError != null)
+		{
+			onHttpError(error);
+		}
+	}
 
-    public void CallOnStarted(string url)
-    {
-        if (onStarted != null)
-        {
-            onStarted(url);
-        }
-    }
+	public void CallOnStarted(string url)
+	{
+		if (onStarted != null)
+		{
+			onStarted(url);
+		}
+	}
 
-    public void CallOnLoaded(string url)
-    {
-        if (onLoaded != null)
-        {
-            onLoaded(url);
-        }
-    }
+	public void CallOnLoaded(string url)
+	{
+		if (onLoaded != null)
+		{
+			onLoaded(url);
+		}
+	}
 
-    public void CallFromJS(string message)
-    {
-        if (onJS != null)
-        {
+	public void CallFromJS(string message)
+	{
+		if (onJS != null)
+		{
 #if !UNITY_ANDROID
 #if UNITY_2018_4_OR_NEWER
-            message = UnityWebRequest.UnEscapeURL(message);
+			message = UnityWebRequest.UnEscapeURL(message);
 #else // UNITY_2018_4_OR_NEWER
             message = WWW.UnEscapeURL(message);
 #endif // UNITY_2018_4_OR_NEWER
 #endif // !UNITY_ANDROID
-            onJS(message);
-        }
-    }
+			onJS(message);
+		}
+	}
 
-    public void CallOnHooked(string message)
-    {
-        if (onHooked != null)
-        {
+	public void CallOnHooked(string message)
+	{
+		if (onHooked != null)
+		{
 #if !UNITY_ANDROID
 #if UNITY_2018_4_OR_NEWER
-            message = UnityWebRequest.UnEscapeURL(message);
+			message = UnityWebRequest.UnEscapeURL(message);
 #else // UNITY_2018_4_OR_NEWER
             message = WWW.UnEscapeURL(message);
 #endif // UNITY_2018_4_OR_NEWER
 #endif // !UNITY_ANDROID
-            onHooked(message);
-        }
-    }
+			onHooked(message);
+		}
+	}
 
 
-    public void AddCustomHeader(string headerKey, string headerValue)
-    {
+	public void AddCustomHeader(string headerKey, string headerValue)
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IPHONE
@@ -1117,13 +1094,13 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("AddCustomHeader", headerKey, headerValue);
 #endif
-    }
+	}
 
-    public string GetCustomHeaderValue(string headerKey)
-    {
+	public string GetCustomHeaderValue(string headerKey)
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
-        return null;
+		//TODO: UNSUPPORTED
+		return null;
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
         return null;
@@ -1136,10 +1113,10 @@ public class WebViewObject : MonoBehaviour, IWebView
             return null;
         return webView.Call<string>("GetCustomHeaderValue", headerKey);
 #endif
-    }
+	}
 
-    public void RemoveCustomHeader(string headerKey)
-    {
+	public void RemoveCustomHeader(string headerKey)
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IPHONE
@@ -1151,12 +1128,12 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("RemoveCustomHeader", headerKey);
 #endif
-    }
+	}
 
-    public void ClearCustomHeader()
-    {
+	public void ClearCustomHeader()
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IPHONE
@@ -1168,12 +1145,12 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("ClearCustomHeader");
 #endif
-    }
+	}
 
-    public void ClearCookies()
-    {
+	public void ClearCookies()
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IPHONE
@@ -1185,13 +1162,13 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("ClearCookies");
 #endif
-    }
+	}
 
 
-    public void SaveCookies()
-    {
+	public void SaveCookies()
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IPHONE
@@ -1203,14 +1180,14 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("SaveCookies");
 #endif
-    }
+	}
 
 
-    public string GetCookies(string url)
-    {
+	public string GetCookies(string url)
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
-        return "";
+		//TODO: UNSUPPORTED
+		return "";
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
         return "";
@@ -1226,12 +1203,12 @@ public class WebViewObject : MonoBehaviour, IWebView
         //TODO: UNSUPPORTED
         return "";
 #endif
-    }
+	}
 
-    public void SetBasicAuthInfo(string userName, string password)
-    {
+	public void SetBasicAuthInfo(string userName, string password)
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
@@ -1245,12 +1222,12 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("SetBasicAuthInfo", userName, password);
 #endif
-    }
+	}
 
-    public void ClearCache(bool includeDiskFiles)
-    {
+	public void ClearCache(bool includeDiskFiles)
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_IPHONE && !UNITY_EDITOR
@@ -1262,13 +1239,13 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("ClearCache", includeDiskFiles);
 #endif
-    }
+	}
 
 
-    public void SetTextZoom(int textZoom)
-    {
+	public void SetTextZoom(int textZoom)
+	{
 #if UNITY_WEBPLAYER || UNITY_WEBGL
-        //TODO: UNSUPPORTED
+		//TODO: UNSUPPORTED
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_LINUX
         //TODO: UNSUPPORTED
 #elif UNITY_IPHONE && !UNITY_EDITOR
@@ -1278,7 +1255,7 @@ public class WebViewObject : MonoBehaviour, IWebView
             return;
         webView.Call("SetTextZoom", textZoom);
 #endif
-    }
+	}
 
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
     void OnApplicationFocus(bool focus)
