@@ -419,10 +419,6 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
          UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
             decisionHandler(WKNavigationActionPolicyCancel);
             return; 
-    } else if (hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
-        UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
-        decisionHandler(WKNavigationActionPolicyCancel);
-        return;
     } else if (![url hasPrefix:@"about:blank"]  // for loadHTML(), cf. #365
                && ![url hasPrefix:@"file:"]
                && ![url hasPrefix:@"http:"]
