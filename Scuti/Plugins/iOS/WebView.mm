@@ -116,7 +116,7 @@ extern "C" void UnitySendMessage(const char *, const char *, const char *);
 static WKProcessPool *_sharedProcessPool;
 static NSMutableArray *_instances = [[NSMutableArray alloc] init];
 
-- (id)initWithGameObjectName:(const char *)gameObjectName_ transparent:(BOOL)transparent zoom:(BOOL)zoom ua:(const char *)ua enableWKWebView:(BOOL)enableWKWebView contentMode:(WKContentMode)contentMode allowsLinkPreview:(BOOL)allowsLinkPreview
+- (id)initWithGameObjectName:(const char *)gameObjectName_ transparent:(BOOL)transparent zoom:(BOOL)zoom ua:(const char *)ua enableWKWebView:(BOOL)enableWKWebView contentMode:(WKContentMode)contentMode allowsLinkPreview:(BOOL)allowsLinkPreview allowsBackForwardNavigationGestures:(BOOL)allowsBackForwardNavigationGestures
 {
     self = [super init];
 
@@ -186,6 +186,7 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
 #endif
         WKWebView *wkwebView = [[WKWebView alloc] initWithFrame:view.frame configuration:configuration];
         wkwebView.allowsLinkPreview = allowsLinkPreview;
+        wkwebView.allowsBackForwardNavigationGestures = allowsBackForwardNavigationGestures;
         webView = wkwebView;
         webView.UIDelegate = self;
         webView.navigationDelegate = self;
@@ -411,13 +412,13 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
         return;
     } else if (((navigationAction.targetFrame != nil && navigationAction.targetFrame.isMainFrame) || 
             (navigationAction.navigationType == WKNavigationTypeLinkActivated ))//&& (!navigationAction.targetFrame || !navigationAction.targetFrame.isMainFrame)))
-            
+
             && hookRegex != nil && [hookRegex firstMatchInString:url options:0 range:NSMakeRange(0, url.length)]) {
-   
-        //NSLog(@"HOOKED %@ in  %s",   navigationAction, [gameObjectName UTF8String]);  
-        UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
+
+        //NSLog(@"HOOKED %@ in  %s",   navigationAction, [gameObjectName UTF8String]); 
+         UnitySendMessage([gameObjectName UTF8String], "CallOnHooked", [url UTF8String]);
             decisionHandler(WKNavigationActionPolicyCancel);
-            return;
+            return; 
     } else if (![url hasPrefix:@"about:blank"]  // for loadHTML(), cf. #365
                && ![url hasPrefix:@"file:"]
                && ![url hasPrefix:@"http:"]
@@ -445,9 +446,6 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
             }
         }
     }
-
-    
-   // NSLog(@"Event through %@ ",   navigationAction);
     UnitySendMessage([gameObjectName UTF8String], "CallOnStarted", [url UTF8String]);
     decisionHandler(WKNavigationActionPolicyAllow);
 }
@@ -807,7 +805,7 @@ static NSMutableArray *_instances = [[NSMutableArray alloc] init];
 @end
 
 extern "C" {
-    void *_CWebViewPlugin_Init(const char *gameObjectName, BOOL transparent, BOOL zoom, const char *ua, BOOL enableWKWebView, int contentMode, BOOL allowsLinkPreview);
+    void *_CWebViewPlugin_Init(const char *gameObjectName, BOOL transparent, BOOL zoom, const char *ua, BOOL enableWKWebView, int contentMode, BOOL allowsLinkPreview, BOOL allowsBackForwardNavigationGestures);
     void _CWebViewPlugin_Destroy(void *instance);
     void _CWebViewPlugin_SetMargins(
         void *instance, float left, float top, float right, float bottom, BOOL relative);
@@ -837,7 +835,7 @@ extern "C" {
     void _CWebViewPlugin_ClearCache(void *instance, BOOL includeDiskFiles);
 }
 
-void *_CWebViewPlugin_Init(const char *gameObjectName, BOOL transparent, BOOL zoom, const char *ua, BOOL enableWKWebView, int contentMode, BOOL allowsLinkPreview)
+void *_CWebViewPlugin_Init(const char *gameObjectName, BOOL transparent, BOOL zoom, const char *ua, BOOL enableWKWebView, int contentMode, BOOL allowsLinkPreview, BOOL allowsBackForwardNavigationGestures)
 {
     if (! (enableWKWebView && [WKWebView class]))
         return nil;
@@ -853,7 +851,7 @@ void *_CWebViewPlugin_Init(const char *gameObjectName, BOOL transparent, BOOL zo
         wkContentMode = WKContentModeRecommended;
         break;
     }
-    CWebViewPlugin *webViewPlugin = [[CWebViewPlugin alloc] initWithGameObjectName:gameObjectName transparent:transparent zoom:zoom ua:ua enableWKWebView:enableWKWebView contentMode:wkContentMode allowsLinkPreview:allowsLinkPreview];
+    CWebViewPlugin *webViewPlugin = [[CWebViewPlugin alloc] initWithGameObjectName:gameObjectName transparent:transparent zoom:zoom ua:ua enableWKWebView:enableWKWebView contentMode:wkContentMode allowsLinkPreview:allowsLinkPreview allowsBackForwardNavigationGestures:allowsBackForwardNavigationGestures];
     [_instances addObject:webViewPlugin];
     return (__bridge_retained void *)webViewPlugin;
 }
