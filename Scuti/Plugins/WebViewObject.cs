@@ -102,6 +102,12 @@ public class WebViewObject : MonoBehaviour, IWebView
     {
         if (webView == null)
             return;
+
+        if (Input.GetKey(KeyCode.Escape) && !ScutiSDK.Instance.isAdsViewOpen())
+        {
+            Back();
+        }
+        
         if (mResumedTimestamp != 0.0f && Time.realtimeSinceStartup - mResumedTimestamp > 0.5f)
         {
             mResumedTimestamp = 0.0f;
